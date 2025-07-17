@@ -1,9 +1,0 @@
-package org.vcpl.triton.scheduler.repository;
-
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;
-
-@NoRepositoryBean
-public interface OtherReadOnlyRepository<T, ID> extends Repository<T, ID> {
-}
-
