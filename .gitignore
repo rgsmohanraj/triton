@@ -1,0 +1,27 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+.idea
+.gitattributes
+.angular
+
+# Ignore Gradle build output diirectory
+build
+node_modules
+
+# Java build artifacts class files
+*.class
+
+# other generated files
+bin/
+gen/
+build/
+
+# Eclipse project files
+.classpath
+.project
+
+
+# Android Studio
+*.iml
+.idea
+.gradle
