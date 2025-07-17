@@ -1,0 +1,187 @@
+<div class="loader-wrapper" *ngIf="showLoader">
+    <div class="loader-index"><span></span></div>
+    <svg>
+        <defs></defs>
+        <filter id="goo">
+            <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+            <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"> </fecolormatrix>
+        </filter>
+    </svg>
+</div>
+<style>
+    span{
+    color: #2b2b2b;
+    }
+</style>
+<div class="container-fluid pt-5">
+<div class="col-xl-12 xl-100 dashboard-sec box-col-12">
+    <div class="card earning-card">
+        <div class="card-body p-0">
+            <div class="row m-0">
+                <div class="col-xl-12 earning-content p-0">
+                    <div class="row m-0 chart-left">
+                        <div class="col-xl-12 p-0 left_side_earning">
+                            <p class="font-roboto">Anchor Details</p>
+                        </div>
+                        <table class="table">
+                            <col style="width:50%">
+                            <col style="width:15%">
+                            <col style="width:15%">
+                            <col style="width:5%">
+                            <col style="width:15%">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Anchor Name</th>
+                                <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">Current Stage</th>
+                                <th scope="col" class="text-nowrap" sortable="flowType" (sort)="onSort($event)">Flow type</th>
+                                <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)" style="text-align: center;">Status</th>
+                                <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Remarks</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let anchor of tableData;let i = index" (click)="currentStepperFun(anchor.appId,anchor.deferralStatus)" style="cursor:pointer;">
+                                <td class="text-nowrap" *ngIf="anchor.customerType==1 && anchor.applicationType==1">{{anchor.customerName}}</td>
+                                <td class="text-nowrap" *ngIf="anchor.customerType==1 && anchor.applicationType==1">
+                                    <span *ngIf="anchor.currentStage=='A1'">Credit</span>
+                                    <span *ngIf="anchor.currentStage=='A2'">Program Norms</span>
+                                    <span *ngIf="anchor.currentStage=='A3'">Credit Checker</span>
+                                    <span *ngIf="anchor.currentStage=='A4'">Ops Maker</span>
+                                    <span *ngIf="anchor.currentStage=='A5'">Ops Checker</span>
+                                    <span *ngIf="anchor.currentStage=='A6'">Deferral Approval</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="anchor.customerType==1 && anchor.applicationType==1">
+                                    <span>New</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="anchor.customerType==1 && anchor.applicationType==1" style="text-align: center;">
+                                    <span *ngIf="anchor.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Submit"></i></span>
+                                    <span *ngIf="anchor.status==1"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Approve"></i></span>
+                                    <span *ngIf="anchor.status==0"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="left" ngbTooltip="In-Progress"></i></span>
+                                    <span *ngIf="anchor.status==-1"><i class="fa fa-user" style="color:#587c95;font-size: 20px !important;"  placement="left" ngbTooltip="Return"></i></span>
+                                    <span *ngIf="anchor.status==-2"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Reject"></i></span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="anchor.customerType==1 && anchor.applicationType==1">{{anchor.remarks}}</td>
+                            </tr>
+                            <tr *ngFor="let anchorRE of tableData;let i = index" (click)="anchorRenewalEnhancementParams(anchorRE.appId,anchorRE.custId,anchorRE.applicationType,anchorRE.deferralStatus)" style="cursor:pointer;">
+                                <td class="text-nowrap" *ngIf="anchorRE.customerType==1 && (anchorRE.applicationType==2 || anchorRE.applicationType==3)">{{anchorRE.customerName}}</td>
+                                <td class="text-nowrap" *ngIf="anchorRE.customerType==1 && (anchorRE.applicationType==2 || anchorRE.applicationType==3)">
+                                    <span *ngIf="anchorRE.currentStage=='A1'">Credit</span>
+                                    <span *ngIf="anchorRE.currentStage=='A2'">Program Norms</span>
+                                    <span *ngIf="anchorRE.currentStage=='A3'">Credit Checker</span>
+                                    <span *ngIf="anchorRE.currentStage=='A4'">Ops Maker</span>
+                                    <span *ngIf="anchorRE.currentStage=='A5'">Ops Checker</span>
+                                    <span *ngIf="anchorRE.currentStage=='A6'">Deferral Approval</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="anchorRE.customerType==1 && (anchorRE.applicationType==2 || anchorRE.applicationType==3)">
+                                    <span *ngIf="anchorRE.applicationType==2">Renewal</span>
+                                    <span *ngIf="anchorRE.applicationType==3">Enhancement</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="anchorRE.customerType==1 && (anchorRE.applicationType==2 || anchorRE.applicationType==3)" style="text-align: center;">
+                                    <span *ngIf="anchorRE.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Submit"></i></span>
+                                    <span *ngIf="anchorRE.status==1"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Approve"></i></span>
+                                    <span *ngIf="anchorRE.status==0"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="left" ngbTooltip="In-Progress"></i></span>
+                                    <span *ngIf="anchorRE.status==-1"><i class="fa fa-user" style="color:#587c95;font-size: 20px !important;"  placement="left" ngbTooltip="Return"></i></span>
+                                    <span *ngIf="anchorRE.status==-2"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Reject"></i></span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="anchorRE.customerType==1 && (anchorRE.applicationType==2 || anchorRE.applicationType==3)">{{anchorRE.remarks}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xl-12 xl-100 dashboard-sec box-col-12">
+    <div class="card earning-card">
+        <div class="card-body p-0">
+            <div class="row m-0">
+                <div class="col-xl-12 earning-content p-0">
+                    <div class="row m-0 chart-left">
+                        <div class="col-xl-12 p-0 left_side_earning">
+                            <p class="font-roboto">Counter Party Details</p>
+                        </div>
+                        <table class="table">
+                            <col style="width:50%">
+                            <col style="width:15%">
+                            <col style="width:15%">
+                            <col style="width:5%">
+                            <col style="width:15%">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Counter Party Name</th>
+                                <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">Current Stage</th>
+                                <th scope="col" class="text-nowrap" sortable="flowType" (sort)="onSort($event)">Flow type</th>
+                                <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)" style="text-align: center;">Status</th>
+                                <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Remarks</th>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="tableData.length>0">
+                            <tr *ngFor="let counter of tableData;let i = index" (click)="currentStepperFunCp(counter.appId,counter.deferralStatus);" style="cursor:pointer;">
+                                <td class="text-nowrap" *ngIf="counter.customerType==2 && counter.applicationType==1">{{counter.customerName}}</td>
+                                <td class="text-nowrap" *ngIf="counter.customerType==2 && counter.applicationType==1">
+                                    <span *ngIf="counter.currentStage=='CP1'">Business</span>
+                                    <span *ngIf="counter.currentStage=='CP2'">Under Writer</span>
+                                    <span *ngIf="counter.currentStage=='CP3'">Credit CPA</span>
+                                    <span *ngIf="counter.currentStage=='CP4'">Under Writer Override</span>
+                                    <span *ngIf="counter.currentStage=='CP5'">CAM Upload</span>
+                                    <span *ngIf="counter.currentStage=='CP6'">Under Writer Review</span>
+                                    <span *ngIf="counter.currentStage=='CP7'">Under Writer PD Review</span>
+                                    <span *ngIf="counter.currentStage=='CP8'">Commercial/Credit</span>
+                                    <span *ngIf="counter.currentStage=='CP9'">RM Customer Acceptance</span>
+                                    <span *ngIf="counter.currentStage=='CP10'">Ops Maker</span>
+                                    <span *ngIf="counter.currentStage=='CP11'">Ops Checker</span>
+                                    <span *ngIf="counter.currentStage=='CP12'">Deferral Approval</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="counter.customerType==2 && counter.applicationType==1">
+                                    <span>New</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="counter.customerType==2 && counter.applicationType==1" style="text-align: center;">
+                                    <span *ngIf="counter.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Submit"></i></span>
+                                    <span *ngIf="counter.status==1"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Approve"></i></span>
+                                    <span *ngIf="counter.status==0"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="left" ngbTooltip="In-Progress"></i></span>
+                                    <span *ngIf="counter.status==-1"><i class="fa fa-user" style="color:##587c95;font-size: 20px !important;"  placement="left" ngbTooltip="Return"></i></span>
+                                    <span *ngIf="counter.status==-2"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Reject"></i></span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="counter.customerType==2 && counter.applicationType==1">{{counter.remarks}}</td>
+                            </tr>
+
+                            <tr *ngFor="let counterRE of tableData;let i = index" (click)="cpRenewalEnhancementParams(counterRE.appId,counterRE.custId,counterRE.applicationType,counterRE.deferralStatus);" style="cursor:pointer;">
+                                <td class="text-nowrap" *ngIf="counterRE.customerType==2 && (counterRE.applicationType==2 || counterRE.applicationType==3)">{{counterRE.customerName}}</td>
+                                <td class="text-nowrap" *ngIf="counterRE.customerType==2 && (counterRE.applicationType==2 || counterRE.applicationType==3)">
+                                    <span *ngIf="counterRE.currentStage=='CP0'">Auto-Renewal CPA</span>
+                                    <span *ngIf="counterRE.currentStage=='CP1'">Business</span>
+                                    <span *ngIf="counterRE.currentStage=='CP2'">Under Writer</span>
+                                    <span *ngIf="counterRE.currentStage=='CP3'">Credit CPA</span>
+                                    <span *ngIf="counterRE.currentStage=='CP4'">Under Writer Override</span>
+                                    <span *ngIf="counterRE.currentStage=='CP5'">CAM Upload</span>
+                                    <span *ngIf="counterRE.currentStage=='CP6'">Under Writer Review</span>
+                                    <span *ngIf="counterRE.currentStage=='CP7'">Under Writer PD Review</span>
+                                    <span *ngIf="counterRE.currentStage=='CP8'">Commercial/Credit</span>
+                                    <span *ngIf="counterRE.currentStage=='CP9'">RM Customer Acceptance</span>
+                                    <span *ngIf="counterRE.currentStage=='CP10'">Ops Maker</span>
+                                    <span *ngIf="counterRE.currentStage=='CP11'">Ops Checker</span>
+                                    <span *ngIf="counterRE.currentStage=='CP12'">Deferral Approval</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="counterRE.customerType==2 && (counterRE.applicationType==2 || counterRE.applicationType==3)">
+                                    <span *ngIf="counterRE.applicationType==2">Renewal</span>
+                                    <span *ngIf="counterRE.applicationType==3">Enhancement</span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="counterRE.customerType==2 && (counterRE.applicationType==2 || counterRE.applicationType==3)" style="text-align: center;">
+                                    <span *ngIf="counterRE.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Submit"></i></span>
+                                    <span *ngIf="counterRE.status==1"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Approve"></i></span>
+                                    <span *ngIf="counterRE.status==0"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="left" ngbTooltip="In-Progress"></i></span>
+                                    <span *ngIf="counterRE.status==-1"><i class="fa fa-user" style="color:##587c95;font-size: 20px !important;"  placement="left" ngbTooltip="Return"></i></span>
+                                    <span *ngIf="counterRE.status==-2"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Reject"></i></span>
+                                </td>
+                                <td class="text-nowrap" *ngIf="counterRE.customerType==2 && (counterRE.applicationType==2 || counterRE.applicationType==3)">{{counterRE.remarks}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

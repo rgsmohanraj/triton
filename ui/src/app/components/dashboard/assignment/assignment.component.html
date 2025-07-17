@@ -1,0 +1,216 @@
+<div class="loader-wrapper" *ngIf="showLoader">
+    <div class="loader-index"><span></span></div>
+    <svg>
+        <defs></defs>
+        <filter id="goo">
+            <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+            <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"> </fecolormatrix>
+        </filter>
+    </svg>
+</div>
+<style>
+    span{
+    color: #2b2b2b;
+    }
+</style>
+<div class="container-fluid pt-5" *ngIf="leadData!=null && !displayMain">
+    <div class="col-xl-12 xl-100 dashboard-sec box-col-12">
+        <div class="card earning-card">
+            <div class="card-body p-0">
+                <div class="row m-0">
+                    <div class="col-xl-12 earning-content p-0">
+                        <div class="row m-0 chart-left">
+                            <div class="col-xl-12 p-0 left_side_earning">
+                                <p class="font-roboto">Anchor Details</p>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                <tr >
+                                    <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Anchor Name</th>
+                                    <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">Current Stage</th>
+                                    <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)" style="text-align: center;">Status</th>
+                                    <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Remarks</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let anchor of tableData;let i = index" (click)="leadDetails(anchor);" style="cursor: pointer;">
+                                    <td class="text-nowrap" *ngIf="anchor.customerType==1">{{anchor.customerName}}</td>
+                                    <td class="text-nowrap" *ngIf="anchor.customerType==1">
+                                        <span *ngIf="anchor.currentStage=='A1'">Credit</span>
+                                        <span *ngIf="anchor.currentStage=='A2'">Program Norms</span>
+                                        <span *ngIf="anchor.currentStage=='A3'">Credit Checker</span>
+                                        <span *ngIf="anchor.currentStage=='A4'">Ops Maker</span>
+                                        <span *ngIf="anchor.currentStage=='A5'">Ops Checker</span>
+                                        <span *ngIf="anchor.currentStage=='A6'">Deferral Approval</span>
+                                    </td>
+                                    <td class="text-nowrap" *ngIf="anchor.customerType==1" style="text-align: center;">
+                                        <span *ngIf="anchor.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Submit"></i></span>
+                                        <span *ngIf="anchor.status==1"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Approve"></i></span>
+                                        <span *ngIf="anchor.status==0"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="right" ngbTooltip="In-Progress"></i></span>
+                                        <span *ngIf="anchor.status==-1"><i class="fa fa-user" style="color:#587c95;font-size: 20px !important;"  placement="left" ngbTooltip="Return"></i></span>
+                                        <span *ngIf="anchor.status==-2"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Reject"></i></span>
+                                    </td>
+                                    <td class="text-nowrap" *ngIf="anchor.customerType==1">{{anchor.remarks}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 xl-100 dashboard-sec box-col-12">
+        <div class="card earning-card">
+            <div class="card-body p-0">
+                <div class="row m-0">
+                    <div class="col-xl-12 earning-content p-0">
+                        <div class="row m-0 chart-left">
+                            <div class="col-xl-12 p-0 left_side_earning">
+                                <p class="font-roboto">Counter Party Details</p>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Counter Party Name</th>
+                                    <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">Current Stage</th>
+                                    <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)" style="text-align: center;">Status</th>
+                                    <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Remarks</th>
+                                </tr>
+                                </thead>
+                                <tbody *ngIf="tableData.length>0">
+                                <tr *ngFor="let counter of tableData;let i = index" (click)="leadDetails(counter);" style="cursor: pointer;">
+                                    <td class="text-nowrap" *ngIf="counter.customerType==2">{{counter.customerName}}</td>
+                                    <td class="text-nowrap" *ngIf="counter.customerType==2">
+                                        <span *ngIf="counter.currentStage=='CP1'">Business</span>
+                                        <span *ngIf="counter.currentStage=='CP2'">Under Writer</span>
+                                        <span *ngIf="counter.currentStage=='CP3'">Credit CPA</span>
+                                        <span *ngIf="counter.currentStage=='CP4'">Under Writer Override</span>
+                                        <span *ngIf="counter.currentStage=='CP5'">CAM Upload</span>
+                                        <span *ngIf="counter.currentStage=='CP6'">Under Writer Review</span>
+                                        <span *ngIf="counter.currentStage=='CP7'">Under Writer PD Review</span>
+                                        <span *ngIf="counter.currentStage=='CP8'">Commercial/Credit</span>
+                                        <span *ngIf="counter.currentStage=='CP9'">RM Customer Acceptance</span>
+                                        <span *ngIf="counter.currentStage=='CP10'">Ops Maker</span>
+                                        <span *ngIf="counter.currentStage=='CP11'">Ops Checker</span>
+                                        <span *ngIf="counter.currentStage=='CP12'">Deferral Approval</span>
+                                    </td>
+                                    <td class="text-nowrap" *ngIf="counter.customerType==2" style="text-align: center;">
+                                        <span *ngIf="counter.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Submit"></i></span>
+                                        <span *ngIf="counter.status==1"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Approve"></i></span>
+                                        <span *ngIf="counter.status==0" ><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="left" ngbTooltip="In-Progress"></i></span>
+                                        <span *ngIf="counter.status==-1"><i class="fa fa-user" style="color:#587c95;font-size: 20px !important;"  placement="left" ngbTooltip="Return"></i></span>
+                                        <span *ngIf="counter.status==-2"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Reject"></i></span>
+                                    </td>
+                                    <td class="text-nowrap" *ngIf="counter.customerType==2">{{counter.remarks}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-5" *ngIf="leadData!=null && displayMain">
+    <div class="col-xl-12 xl-100 dashboard-sec box-col-12">
+        <div class="col-xl-12">
+            <button class="btn btn-primary btn-mail text-center float-end mb-2 mt-0" type="button" (click)="tableDetails()">Back</button>
+        </div>
+        <div class="card
+">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 fw-bold">
+                            <label>Name</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label>{{customerName}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 fw-bold">
+                            <label>Current Stage</label>
+                        </div>
+                        <div class="col-md-6" *ngIf="customerType==1">
+                            <label *ngIf="currentStage=='A1'">Credit</label>
+                            <label *ngIf="currentStage=='A2'">Program Norms</label>
+                            <label *ngIf="currentStage=='A3'">Credit Checker</label>
+                            <label *ngIf="currentStage=='A4'">Ops Maker</label>
+                            <label *ngIf="currentStage=='A5'">Ops Checker</label>
+                            <label *ngIf="currentStage=='A6'">Deferral Approval</label>
+                        </div>
+                        <div class="col-md-6" *ngIf="customerType==2">
+                            <label *ngIf="currentStage=='CP1'">Business</label>
+                            <label *ngIf="currentStage=='CP2'">Under Writer</label>
+                            <label *ngIf="currentStage=='CP3'">Credit CPA</label>
+                            <label *ngIf="currentStage=='CP4'">Under Writer Override</label>
+                            <label *ngIf="currentStage=='CP5'">CAM Upload</label>
+                            <label *ngIf="currentStage=='CP6'">Under Writer Review</label>
+                            <label *ngIf="currentStage=='CP7'">Under Writer PD Review</label>
+                            <label *ngIf="currentStage=='CP8'">Commercial/Credit</label>
+                            <label *ngIf="currentStage=='CP9'">RM Customer Acceptance</label>
+                            <label *ngIf="currentStage=='CP10'">Ops Maker</label>
+                            <label *ngIf="currentStage=='CP11'">Ops Checker</label>
+                            <label *ngIf="currentStage=='CP12'">Deferral Approval</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 fw-bold">
+                            <label>Status</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label *ngIf="status==2">Submit</label>
+                            <label *ngIf="status==1">Approve</label>
+                            <label *ngIf="status==0">Work In Progress</label>
+                            <label *ngIf="status==-1">Return</label>
+                            <label *ngIf="status==-2">Reject</label>
+                        </div>
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6 fw-bold">-->
+<!--                            <label>Remarks</label>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <label>{{remarks}}</label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="row">
+                        <div class="col-md-6 fw-bold">
+                            <label>Assigned</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label>{{emailId}}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 fw-bold">
+                            <label>Assign To</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="js-example-basic-single col-sm-12 job-select2 form-group" type="text" name="userGrpData" [(ngModel)]="userGrpData" required="">
+                                <option value="{{grpData.email}}" *ngFor="let grpData of grpListData;let i=index">{{grpData.firstName}} {{grpData.lastName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <button class="btn btn-primary btn-mail text-center float-end mb-2 mt-0" type="button" (click)="assignFun();">Assign</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-5" *ngIf="leadData==null">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    Currently you don't have access.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

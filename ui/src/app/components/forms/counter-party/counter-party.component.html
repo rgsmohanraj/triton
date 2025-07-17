@@ -1,0 +1,1527 @@
+<div class="loader-wrapper" *ngIf="showLoader">
+    <div class="loader-index"><span></span></div>
+    <svg>
+        <defs></defs>
+        <filter id="goo">
+            <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+            <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"> </fecolormatrix>
+        </filter>
+    </svg>
+</div>
+<app-breadcrumb [title]="'Counter Party Details'" [items]="['Counter Party']" [active_item]="'Counter Party Details'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card" *ngIf="tableViewDetails">
+                <div class="card-header">
+                    <h5>CounterParty List</h5>
+                    <div class="job-filter float-end row">
+                        <div class="col-md-5"> <button class="btn btn-primary btn-mail text-center mb-0 mt-0 w-100" [routerLink]="['/form/new-counter']" type="button"><i
+                                class="fa fa-plus-square-o me-3"></i> New CounterParty</button></div>
+                        <div ngbDropdown class="d-inline-block col-md-2" placement="bottom">
+                            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle style="padding-right:12px">Filter</button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button class="dropdown-item" (click)="statusTable(2)"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i>&nbsp;Active</button>
+                                <button class="dropdown-item" (click)="statusTable(0)"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="right" ngbTooltip="In-Progress"></i>&nbsp;In-Progress</button>
+                                <button class="dropdown-item" (click)="statusTable(-2)"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="In-Active"></i>&nbsp;Reject</button>
+                                <button class="dropdown-item" (click)="statusTable('clear')"><i class="fa fa-trash" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Clear"></i>&nbsp; Clear</button>
+                            </div>
+                        </div>
+                        <div class="faq-form col-md-5">
+                            <input class="form-control" type="text" [(ngModel)]="searchValue" (keyup)="searAnchor($event)" placeholder="Search..">
+                            <app-feather-icons class="search-icon" [icon]="'search'"></app-feather-icons>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body custom-datatable" style="overflow-y:auto;">
+                    <div class="custom-datatable" >
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">CounterParty Name</th>
+                                <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">PAN</th>
+                                <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)">CIN</th>
+                                <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let item of anchorList let i=index;" (click)="getAnchorAllAppIds(anchorList[i].appId.id,anchorList[i].appId.customerInfoEntity.id,anchorList[i].status);" style="cursor: pointer;">
+                                <td class="text-nowrap" *ngIf="(anchorList[i].appId.type==2 && statusCheck == item.status) || (anchorList[i].appId.type==2 && statusCheck == 'clear')">{{anchorList[i].appId.customerInfoEntity.customerName}}</td>
+                                <td class="text-nowrap" *ngIf="(anchorList[i].appId.type==2 && statusCheck == item.status) || (anchorList[i].appId.type==2 && statusCheck == 'clear')">{{anchorList[i].appId.customerInfoEntity.pan}}</td>
+                                <td class="text-nowrap" *ngIf="(anchorList[i].appId.type==2 && statusCheck == item.status) || (anchorList[i].appId.type==2 && statusCheck == 'clear')">{{anchorList[i].appId.customerInfoEntity.cin}}</td>
+                                <td *ngIf="(anchorList[i].appId.type==2 && statusCheck == item.status) || (anchorList[i].appId.type==2 && statusCheck == 'clear')">
+                                    <span *ngIf="item.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i></span>
+                                    <span *ngIf="item.status==-2" ><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="In-Active"></i></span>
+                                    <span *ngIf="item.status==0" ><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="right" ngbTooltip="In-Progress"></i></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between p-2">
+                            <ngb-pagination
+                                    [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="viewDetailsAllAppIds">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card" >
+                            <div class="custom-datatable" >
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="text-nowrap" >Customer Name</th>
+                                        <th scope="col" class="text-nowrap" >Flow Type</th>
+                                        <th scope="col" class="text-nowrap" >Onboarded Date</th>
+                                        <th scope="col" class="text-nowrap" >Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody >
+                                    <tr *ngFor="let item of getAllAppId; let i=index;" (click)="anchorDetails(item.appId,item.customer,item.custId);" style="cursor: pointer;">
+                                        <td class="text-nowrap"  >{{item.customer}}</td>
+                                        <td class="text-nowrap" >
+                                            <span *ngIf="item.appType == 1" style="color:unset;">New</span>
+                                            <span *ngIf="item.appType == 2" style="color:unset;">Renewal</span>
+                                            <span *ngIf="item.appType == 3" style="color:unset;">Enhancement</span>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <span *ngIf="item.defDate && !item.appDate" style="color:unset;">{{item.defDate}}</span>
+                                            <span *ngIf="!item.defDate && item.appDate" style="color:unset;">{{item.appDate}}</span>
+                                            <span *ngIf="!item.defDate && !item.appDate" style="color:unset;">-</span>
+                                        </td>
+                                        <td class="text-nowrap">{{item.status}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="tableDetails()">Back</button>
+                            </div>
+                        <div style="cursor:pointer;" class="leftTab mb-3 mt-3" (click)="popupForRE();" *ngIf="renewalEnhancement && reCheck"><i class="fa fa-refresh me-2" aria-hidden="true"></i>Renewal/Enhancement </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="viewDetails">
+                 <div class="row">
+                    <div class="col-md-10">
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Counter Party Basic Details:</label>
+                                <hr>
+                            </div>
+                            <div *ngFor="let cpBasic of counterPartyList let i = index">
+                                <div class="row" >
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>PAN</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.panNumber}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Company Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.companyName}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>GST Number</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.gstNumber}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>CIN Number</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.cinNumber}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Constitution</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.constitution}}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>City</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.city}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>State</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.state}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Source</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.source}}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Subsource</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.subSource}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Activity</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.activity}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>RM Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.rmName}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Customer Contact Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.cusContName}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Customer Contact Mobile</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.cusContactNumber}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Customer Contact Email</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.cusContactEmail}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Type</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{cpBasic.counterPartyType}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-4">
+                            <div class="fw-bold form-group" >
+                                <label >Proposal Details:</label>
+                                <hr>
+                            </div>
+                            <div *ngFor="let proposal of proposalList;  let i = index">
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Name of the Anchor</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{proposalList[i].customerInfoEntity.customerName}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Product</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{proposal.product}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Proposed Amount</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{proposal.proposed}}</label>
+                                    </div>
+                                </div>
+                                <br> <br> <br>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Limit Eligibility:</label>
+                                <hr>
+                            </div>
+                            <div *ngFor="let limitEligibility of limitEligibilityList;  let i = index">
+                                <div class="row" >
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Anchor Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibilityList[i].customerInfoEntity.customerName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Product</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.product}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Regular Limit(Current If any)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.currentLimit}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Regular Limit(Proposed)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.proposedLimit}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Eligible Limit</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.eligibleLimit}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Ad-hoc Limit(possible)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.adhocLimit}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Credit Period</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.creditPeriod}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Door-To-Door</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.doorToDoor}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Invoice Ageing</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.invoiceAgeing}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Expected Growth in To</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.expectedGrowth}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Monthly Average To With Anchor</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.monthlyAverage}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Approtioned Exisiting WC Limits</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.approtionedLimits}}</label>
+<!--                                                <span  class="suffix-rp"> days</span>-->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Exisiting SCF Limit From Others</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.existingScfLimits}}</label>
+                                                <span  class="suffix-rp"> days</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Model Limit</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.modelLimit}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Customer Requested Amount</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.customerRequestedAmount}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Anchor Recommended Amount</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.anchorRecommendedAmount}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Receivables</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.receivables}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Inventory</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.inventory}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Creditors</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.creditor}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Expected monthly turnover with anchor</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.expectedMonthlyTurnOverWithAnchor}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Model Adhoc Limit</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{limitEligibility.modelAdhocLimit}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br> <br> <br>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >TermSheet Details:</label>
+                                <hr>
+                            </div>
+                            <div *ngFor="let termSheet of termSheetList; let i = index">
+                                <div class="row" >
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Anchor Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheetList[i].customerInfoEntity.customerName}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Product</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.product}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Regular Limit</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.regularLimit}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Ad-hoc Limit</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.adhocLimit}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Credit Period</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.creditPeriod}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Door-to-Door</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.doorToDoor}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Invoice Ageing</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.invoiceAgeing}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Margin</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.margin}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Interest rate</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.interestRate}}</label>
+                                                <span  class="suffix-rp">%</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>PF</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.pf}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Renewal</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.renewal}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Interest Rate Type</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.interestRateType}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Renewal Period</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.renewalPeriod}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Application Of Interest</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.applyOfInterest}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Interest Borne By</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.interestBorneBy}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Penalty Borne By</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.penaltyBorneBy}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Invoice Funding</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.invoiceFunding}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Grace Days</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.graceDays}}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="fw-bold col-md-6">
+                                                <label>Product Expiry Date</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{termSheet.expiryDate}}</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br> <br> <br>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Debt Profile:</label>
+                                <hr>
+                            </div>
+                            <div class="row" *ngFor="let debtProfile of debtProfileList; let i = index">
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Bank/FI</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.bankFI}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Facility Type</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.facilityType}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Tenure</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.tenure}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Date(Sanction)</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.sanctionDate}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Limit Sanctioned:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.sanctionLimit}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>O/S as On</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.outstandingOnDate}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>EMI</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.emi}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Interest</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.interestRate}}</label>
+                                        <span  class="suffix-rp">%</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Security</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.security}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>General or Specific Limit Calculation</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.specificLimit}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>Remarks</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{debtProfile.remarks}}</label>
+                                    </div>
+                                </div>
+                                <br><br><br>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Collateral:</label>
+                                <hr>
+                            </div>
+                            <div class="row" *ngFor="let collateral of collateralList;  let i = index">
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>{{collateralList[i].collateralMasterEntity.displayName}}</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{collateral.value}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Fund Request Details:</label>
+                                <hr>
+                            </div>
+                            <div class="row" *ngFor="let fundReq of fundReqDetails;  let i = index" style="visibility: visible;">
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>{{fundReqDetails[i].fundRequirementMasterEntity.displayName}}</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{fundReq.value}}</label>
+                                    </div>
+                                </div>
+                                <br><br>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Due Diligence Details:</label>
+                                <hr>
+                            </div>
+                            <div class="row" *ngFor="let DueDiligence of dueDiligenceList;  let i = index">
+                                <div class="row">
+                                    <div class="fw-bold col-md-6">
+                                        <label>{{dueDiligenceList[i].dueDiligenceMasterEntity.displayName}}</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>{{DueDiligence.value}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Beneficiary Details:</label>
+                                <hr>
+                            </div>
+                            <div class="row"  *ngFor="let anchorBeneficiary of anchorBeneficiary;  let i = index" >
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Beneficiary Type</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{anchorBeneficiary.benType}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Beneficiary Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{anchorBeneficiary.benName}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Bank Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{anchorBeneficiary.bankName}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Bank Account Number</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{anchorBeneficiary.bankAcctNumber}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Bank Ifsc Code</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{anchorBeneficiary.bankifscCode}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="fw-bold col-md-6">
+                                            <label>Bank Branch</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{anchorBeneficiary.bankBranchName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Credit Policy Details:</label>
+                                <hr>
+                            </div>
+                            <div *ngFor="let results of creditPolicyResults; let i = index">
+                                <label ><b>Anchor Name :&nbsp;{{results.anchorName}}</b> </label>
+                                <label *ngIf="results.status == true"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status :&nbsp;Approved</b> </label>
+                                <label *ngIf="results.status == false"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status :&nbsp;Reject</b> </label>
+                                <table class="table table-border-vertical">
+                                    <col style="width:70%">
+                                    <col style="width:15%">
+                                    <col style="width:15%">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Checking Criteria</th>
+                                        <th scope="col">Result</th>
+                                        <th scope="col">CreditPolicy Values</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let result of results.data; let k = index">
+                                        <td>{{result.displayName}}</td>
+                                        <td><div *ngIf="result.result; else elseCreditResult">
+                                            <span class="badge badge-success">True</span>
+                                        </div>
+                                            <ng-template #elseCreditResult><span class="badge badge-danger">False</span></ng-template>
+                                        </td>
+                                        <td>{{result.value}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 ">
+                            <div class="fw-bold form-group" >
+                                <label >Soft Policy Details:</label>
+                                <hr>
+                            </div>
+                            <div >
+                                <div *ngIf="!anchorType">
+                                    <div *ngFor="let results of softPolicyResult; let i = index">
+                                        <table class="table table-border-vertical">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Category</th>
+                                                <th scope="col">Criteria</th>
+                                                <th scope="col">Results</th>
+                                                <th scope="col">Soft Policy Value</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr *ngFor="let result of results; let k = index">
+                                                <td>{{result.type}}</td>
+                                                <td>{{result.subType}}</td>
+                                                <!--                                                                <td>{{result.result}}</td>-->
+                                                <td><div *ngIf="result.result; else elseResult">
+                                                    <span class="badge badge-success">True</span>
+                                                </div>
+                                                    <ng-template #elseResult><span class="badge badge-danger">False</span></ng-template>
+                                                </td>
+                                                <td>{{result.softPolicyValue}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                    </div>
+                                </div>
+                                <div *ngIf="anchorType">
+                                    <h3 *ngIf="anchorType">Dealer :</h3>
+                                    <table class="table table-border-vertical">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Criteria</th>
+                                            <th scope="col">Results</th>
+                                            <th scope="col">Soft Policy Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let result of softPolicyDealerResult; let k = index">
+                                            <td>{{result.type}}</td>
+                                            <td>{{result.subType}}</td>
+                                            <!--                                                                <td>{{result.result}}</td>-->
+                                            <td><div *ngIf="result.result; else elseResult">
+                                                <span class="badge badge-success">True</span>
+                                            </div>
+                                                <ng-template #elseResult><span class="badge badge-danger">False</span></ng-template>
+                                            </td>
+                                            <td>{{result.softPolicyValue}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <h3 class="mt-3" *ngIf="anchorType">Vendor :</h3>
+                                    <table class="table table-border-vertical">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Criteria</th>
+                                            <th scope="col">Results</th>
+                                            <th scope="col">Soft Policy Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let result of softPolicyVendorResult; let k = index">
+                                            <td>{{result.type}}</td>
+                                            <td>{{result.subType}}</td>
+                                            <!--                                                                <td>{{result.result}}</td>-->
+                                            <td><div *ngIf="result.result; else elseResult">
+                                                <span class="badge badge-success">True</span>
+                                            </div>
+                                                <ng-template #elseResult><span class="badge badge-danger">False</span></ng-template>
+                                            </td>
+                                            <td>{{result.softPolicyValue}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
+                               </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="p-0 mt-1">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="anchorFlowHistoryDetails()">Back</button>
+                            </div>
+                            <div style="cursor:pointer;" class="leftTab mb-3 p-2" (click)="getCounterPartyDocument();getDeferralDocReports();getOtherDocDownload();getOtherDocMaster();"><i class="fa fa-folder-open me-2"></i>Documents</div>
+                            <div style="cursor:pointer;" class="leftTab mb-3 p-2" (click)="getDefHistoryDocReports();getOtherDocDownload();getOtherDocMaster();"><i class="fa fa-history me-2" aria-hidden="true"></i>Deferral History </div>
+                            <div  style="cursor:pointer;" class="leftTab p-2" (click)="cpWorkflowPage();"><i class="fa fa-cogs me-2" ></i>Workflow</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid" *ngIf="viewDocument">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="default-accordion" *ngFor="let docType of documentMaster;let i=index">
+                            <div *ngIf="docType.type == 2;">
+                                <h4 class="mt-2">{{docType.displayName}}</h4>
+                                <div *ngFor="let documents of docReports;let j=index">
+                                    <div class="card" style="padding:2%;" *ngIf="documents.docTypeId==docType.id && documents.defType == 0;">
+                                        <div>
+                                            <label><b>{{documents.docList}}</b></label>
+                                        </div>
+                                        <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                            <div class="col-sm-10 mb-2">
+                                                <label  class="custom-file" required="">{{file.fileName}}</label>
+                                            </div>
+                                            <div class="col-sm-2 mb-2">
+                                                <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.docTypeName,documents.docListName,file.fileName);">
+                                                    <i class="mt-1 fa fa-cloud-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="padding:2%;" *ngIf="documents.docTypeId==docType.id && documents.defType == 1;">
+                                        <div>
+                                            <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                        </div>
+                                        <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                            <div class="col-sm-10 mb-2">
+                                                <label  class="custom-file" required="">{{file.fileName}}</label>
+                                            </div>
+                                            <div class="col-sm-2 mb-2">
+                                                <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                    <i class="mt-1 fa fa-cloud-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="docType.type == 3;">
+                                <h4 class="mt-2">{{docType.displayName}}</h4>
+                                <div *ngFor="let documents of docReports;let j=index">
+                                    <div class="card" style="padding:2%;" *ngIf="documents.docTypeId==docType.id && documents.defType == 0;">
+                                        <div>
+                                            <label><b>{{documents.docList}}</b></label>
+                                        </div>
+                                        <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                            <div class="col-sm-10 mb-2">
+                                                <label  class="custom-file" required="">{{file.fileName}}</label>
+                                            </div>
+                                            <div class="col-sm-2 mb-2">
+                                                <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.docTypeName,documents.docListName,file.fileName);">
+                                                    <i class="mt-1 fa fa-cloud-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="padding:2%;" *ngIf="documents.docTypeId==docType.id && documents.defType == 1;">
+                                        <div>
+                                            <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                        </div>
+                                        <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                            <div class="col-sm-10 mb-2">
+                                                <label  class="custom-file" required="">{{file.fileName}}</label>
+                                            </div>
+                                            <div class="col-sm-2 mb-2">
+                                                <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                    <i class="mt-1 fa fa-cloud-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="docType.type == 4;">
+                                <h4 class="mt-2">{{docType.displayName}}</h4>
+                                <div *ngFor="let documents of docReports;let j=index">
+                                    <div class="card" style="padding:2%;" *ngIf="documents.docTypeId==docType.id && documents.defType == 0;">
+                                        <div>
+                                            <label><b>{{documents.docList}}</b></label>
+                                        </div>
+                                        <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                            <div class="col-sm-10 mb-2">
+                                                <label  class="custom-file" required="">{{file.fileName}}</label>
+                                            </div>
+                                            <div class="col-sm-2 mb-2">
+                                                <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.docTypeName,documents.docListName,file.fileName);">
+                                                    <i class="mt-1 fa fa-cloud-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="padding:2%;" *ngIf="documents.docTypeId==docType.id && documents.defType == 1;">
+                                        <div>
+                                            <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                        </div>
+                                        <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                            <div class="col-sm-10 mb-2">
+                                                <label  class="custom-file" required="">{{file.fileName}}</label>
+                                            </div>
+                                            <div class="col-sm-2 mb-2">
+                                                <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                    <i class="mt-1 fa fa-cloud-download"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="docType.type == 5;">
+                                <div *ngFor="let docCategory of docType.documentCategoryEntities;let i=index">
+                                    <h4 class="mt-2">{{docCategory.displayName}}</h4>
+                                    <div *ngFor="let documents of docReports;let j=index">
+                                        <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 0;">
+                                            <div>
+                                                <label><b>{{documents.docList}}</b></label>
+                                            </div>
+                                            <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                <div class="col-sm-10 mb-2">
+                                                    <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.docCategoryName,documents.docListName,file.fileName);">
+                                                        <i class="mt-1 fa fa-cloud-download"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 1;">
+                                            <div>
+                                                <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                            </div>
+                                            <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                <div class="col-sm-10 mb-2">
+                                                    <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                        <i class="mt-1 fa fa-cloud-download"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="mt-1"></div>
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="viewCpDetails()">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="deferralDocView">
+                    <h4 class="mt-2">Deferred Documents</h4>
+                    <div class="col-sm-10 card" style="padding: 2%;">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <label  class="custom-file" required=""><b>Document Name</b></label>
+                            </div>
+<!--                            <div class="col-sm-3">-->
+<!--                                <label  class="custom-file" required=""><b>ID</b></label>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-2">-->
+<!--                                <label  class="custom-file" required=""><b>Completed Date</b></label>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-2">-->
+<!--                                <label  class="custom-file" required=""><b>Proposed ETA</b></label>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="default-accordion" *ngFor="let deferral of deferralDocReportArray;let i=index">
+                            <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 1">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 2">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label  class="custom-file" required="">{{deferral.documentId}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.docCompletionDate}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 1 && deferral.deferral == 1">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <label  class="custom-file" required="">Others - {{deferral.displayName}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-sm-12" style="display:flex !important">
+                                <div *ngFor="let rmName of rmNameArray;let i=index">
+                                    <div *ngIf="rmName.email == rmNames">
+                                        <label><b>RM Name : </b></label>
+                                        <label> {{rmName.firstName}} {{rmName.lastName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="deferralHistory">
+                <div class="row" *ngIf="deferralDocView">
+                    <div class="col-sm-10">
+                        <h4 class="mt-2">Deferral Documents History</h4>
+                        <div class="col-sm-12 card" style="padding: 1% 2% 2% 3%; margin-left: 1%;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label  class="custom-file" required=""><b>Document Name</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>ETA</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>Extend ETA</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>Status</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>Processed Date</b></label>
+                                </div>
+                            </div>
+
+                            <div class="default-accordion" *ngFor="let deferral of deferralDocReportArray;let i=index">
+                                <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 1">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.revisedTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.message}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.processedDate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 2">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.revisedTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.message}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.processedDate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 1 && deferral.deferral == 1">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label  class="custom-file" required="">Others - {{deferral.displayName}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.revisedTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.message}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.processedDate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-sm-12" style="display:flex !important">
+                                    <div *ngFor="let rmName of rmNameArray;let i=index">
+                                        <div *ngIf="rmName.email == rmNames">
+                                            <label><b>RM Name : </b></label>
+                                            <label> {{rmName.firstName}} {{rmName.lastName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mt-1"></div>
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="viewCpDetails()">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+            <div class="row" *ngIf="cpWorkFlowFlag">
+                <div class="col-md-10">
+                    <ul class="timeline" >
+                        <li  [ngClass]=" i%2==0 ? 'timeline-normal' : 'timeline-inverted'" *ngFor="let resp of workFlowArray;  let i = index">
+                            <div *ngIf="resp.status==2" class="timeline-badge">
+                                <i *ngIf="resp.stage.stageId=='CP1'" class="fa fa-user" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP2'" class="fa fa-credit-card-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP3'" class="fa fa-percent" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP4'" class="fa fa-pencil-square-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP5'" class="fa fa-upload" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP6'" class="fa fa-calendar-check-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP7'" class="fa fa-check-square" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP8'" class="fa fa-credit-card" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP9'" class="fa fa-thumbs-up" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP10'" class="fa fa-cogs" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP11'" class="fa fa-list-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP12'" class="fa fa-list-alt" ></i>
+                            </div>
+                            <div *ngIf="resp.status==0" class="timeline-badges">
+                                <i *ngIf="resp.stage.stageId=='CP1'" class="fa fa-user" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP2'" class="fa fa-credit-card-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP3'" class="fa fa-percent" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP4'" class="fa fa-pencil-square-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP5'" class="fa fa-upload" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP6'" class="fa fa-calendar-check-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP7'" class="fa fa-check-square" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP8'" class="fa fa-credit-card" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP9'" class="fa fa-thumbs-up" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP10'" class="fa fa-cogs" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP11'" class="fa fa-list-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP12'" class="fa fa-list-alt" ></i>
+                            </div>
+                            <div *ngIf="resp.status==-2" class="timeline-badges-reject">
+                                <i *ngIf="resp.stage.stageId=='CP1'" class="fa fa-user" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP2'" class="fa fa-credit-card-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP3'" class="fa fa-percent" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP4'" class="fa fa-pencil-square-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP5'" class="fa fa-upload" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP6'" class="fa fa-calendar-check-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP7'" class="fa fa-check-square" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP8'" class="fa fa-credit-card" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP9'" class="fa fa-thumbs-up" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP10'" class="fa fa-cogs" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP11'" class="fa fa-list-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP12'" class="fa fa-list-alt" ></i>
+                            </div>
+                            <div *ngIf="resp.status==-1" class="timeline-badges-return">
+                                <i *ngIf="resp.stage.stageId=='CP1'" class="fa fa-user" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP2'" class="fa fa-credit-card-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP3'" class="fa fa-percent" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP4'" class="fa fa-pencil-square-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP5'" class="fa fa-upload" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP6'" class="fa fa-calendar-check-o" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP7'" class="fa fa-check-square" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP8'" class="fa fa-credit-card" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP9'" class="fa fa-thumbs-up" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP10'" class="fa fa-cogs" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP11'" class="fa fa-list-alt" ></i>
+                                <i *ngIf="resp.stage.stageId=='CP12'" class="fa fa-list-alt" ></i>
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <div *ngIf="resp.stage.stageId=='CP1'" class="paras"><span class="spanheadingss">Business</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP2'" class="paras"><span class="spanheadingss">Credit/Risk Head</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP3'" class="paras"><span class="spanheadingss">Credit CPA</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP4'" class="paras"><span class="spanheadingss">Under Writer Override</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP5'" class="paras"><span class="spanheadingss">CAM Upload</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP6'" class="paras"><span class="spanheadingss">Under Writer Review</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP7'" class="paras"><span class="spanheadingss">Under Writer PD Review</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP8'" class="paras"><span class="spanheadingss">Commercial/Credit</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP9'" class="paras"><span class="spanheadingss">RM Customer Acceptance</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP10'" class="paras"><span class="spanheadingss">Operation Maker</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP11'" class="paras"><span class="spanheadingss">Operation  Checker</span></div>
+                                    <div *ngIf="resp.stage.stageId=='CP12'" class="paras"><span class="spanheadingss">Deferral Commitee</span></div>
+                                    </div>
+                                <div class="timeline-body">
+                                    <p class="para row"><span class="spanheading col-4">Owner </span><span class="col-8 a" title="{{resp.approverInfo.substring(0,resp.approverInfo.indexOf('@'))}}">:{{resp.approverInfo.substring(0,resp.approverInfo.indexOf('@'))}}</span></p>
+
+                                    <p class="para row" *ngIf="resp.status==2" ><span class="spanheading col-4">Status </span><span class="col-8">: Approved</span></p>
+                                    <p class="para row" *ngIf="resp.status==0" ><span class="spanheading col-4">Status </span><span class="col-8">: Work In Progress</span></p>
+                                    <p class="para row" *ngIf="resp.status==-2" ><span class="spanheading col-4">Status </span><span class="col-8">: Reject</span></p>
+                                    <p class="para row" *ngIf="resp.status==-1" ><span class="spanheading col-4">Status </span><span class="col-8">: Return</span></p>
+<!--                                        <p class="para row" *ngIf="resp.createdTime !== null;else elseResult">-->
+<!--                                            <span class="spanheading col-5">Start date </span> <span class="col-7">: {{resp.createdTime.split(".")[0]}}</span>-->
+<!--                                            <ng-template #elseResult></ng-template>-->
+<!--                                        </p>-->
+<!--                                        <p class="para row"><span class="spanheading col-5">Start date </span> <span class="col-7">: {{resp.createdTime.split(".")[0]}}</span></p>-->
+<!--                                        <p class="para row"><span class="spanheading col-5">Completed date </span> <span class="col-7">: {{resp.updatedTime.split(".")[0]}}</span></p>-->
+                                    <p class="para row" *ngIf="resp.createdTime;else elseResults">
+                                        <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{resp.createdTime.split(".")[0]}}</span>
+                                    </p>
+
+                                    <ng-template #elseResults >
+                                        <p class="para row">
+                                            <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{resp.date}}</span>
+                                        </p>
+                                    </ng-template>
+                                        <p class="para row" *ngIf="resp.updatedTime;else elseResult">
+                                        <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{resp.updatedTime.split(".")[0]}}</span>
+                                    </p>
+
+                                    <ng-template #elseResult>
+                                        <p class="para row">
+                                            <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{resp.date}}</span>
+                                        </p>
+                                    </ng-template>
+                                    <span>
+                                        <span class="card" style="margin-top:10px !important;margin-bottom:10px !important;">
+                                            <ngb-accordion >
+                                                <ngb-panel>
+                                                    <ng-template ngbPanelTitle class="spanheading" > Remarks</ng-template>
+                                                    <ng-template ngbPanelContent>{{resp.remarks}}</ng-template>
+                                                </ngb-panel>
+                                            </ngb-accordion>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="timeline" >
+                        <li  [ngClass]=" i%2==0 ? 'timeline-inverted' : 'timeline-normal'" *ngFor="let defResp of deferralWorkFlowArray;  let i = index">
+                            <div *ngIf="defResp.status==2" class="timeline-badge">
+                                <i *ngIf="defResp.stage.stageId=='DCP1'" class="fa fa-edit" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP2'" class="fa fa-thumbs-o-up" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP3'" class="fa fa-check" ></i>
+                            </div>
+                            <div *ngIf="defResp.status==-1" class="timeline-badges-return">
+                                <i *ngIf="defResp.stage.stageId=='DCP1'" class="fa fa-edit" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP2'" class="fa fa-thumbs-o-up" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP3'" class="fa fa-check" ></i>
+                            </div>
+                            <div *ngIf="defResp.status==0" class="timeline-badges">
+                                <i *ngIf="defResp.stage.stageId=='DCP1'" class="fa fa-edit" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP2'" class="fa fa-thumbs-o-up" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP3'" class="fa fa-check" ></i>
+                            </div>
+                            <div *ngIf="defResp.status==-2" class="timeline-badges-reject">
+                                <i *ngIf="defResp.stage.stageId=='DCP1'" class="fa fa-user" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP2'" class="fa fa-thumbs-o-up" ></i>
+                                <i *ngIf="defResp.stage.stageId=='DCP3'" class="fa fa-check" ></i>
+                            </div>
+
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <div *ngIf="defResp.stage.stageId=='DCP1'" class="paras"><span class="spanheadingss">OPS MAKER</span></div>
+                                    <div *ngIf="defResp.stage.stageId=='DCP2'" class="paras"><span class="spanheadingss">OPS CHECKER</span></div>
+                                    <div *ngIf="defResp.stage.stageId=='DCP3'" class="paras"><span class="spanheadingss">DEFERRAL COMMITEE</span></div>
+                                </div>
+                                <div class="timeline-body">
+
+                                    <p class="para row"><span class="spanheading col-4">Owner </span><span class="col-8">: {{defResp.approverInfo.substring(0,defResp.approverInfo.indexOf('@'))}}</span></p>
+                                    <p class="para row" *ngIf="defResp.status==2" ><span class="spanheading col-4">Status </span><span class="col-8">: Approved</span></p>
+                                    <p class="para row" *ngIf="defResp.status==-1" ><span class="spanheading col-4">Status </span><span class="col-8">: Return</span></p>
+                                    <p class="para row" *ngIf="defResp.status==0" ><span class="spanheading col-4">Status </span><span class="col-8">: Work In Progress</span></p>
+                                    <p class="para row" *ngIf="defResp.status==-2" ><span class="spanheading col-4">Status </span><span class="col-8">: Reject</span></p>
+
+
+                                    <p class="para row" *ngIf="defResp.createdTime;else elseResults">
+                                        <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{defResp.createdTime.split(".")[0]}}</span>
+                                    </p>
+
+                                    <ng-template #elseResults >
+                                        <p class="para row">
+                                            <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{defResp.date}}</span>
+                                        </p>
+                                    </ng-template>
+
+                                    <p class="para row" *ngIf="defResp.updatedTime;else elseResult">
+                                        <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{defResp.updatedTime.split(".")[0]}}</span>
+                                    </p>
+
+                                    <ng-template #elseResult>
+                                        <p class="para row">
+                                            <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{defResp.date}}</span>
+                                        </p>
+                                    </ng-template>
+
+                                    <span>
+                                            <span class="card" style="margin-top:10px !important;margin-bottom:10px !important;">
+                                                <ngb-accordion >
+                                                    <ngb-panel>
+                                                        <ng-template ngbPanelTitle class="spanheading" > Remarks</ng-template>
+                                                        <ng-template ngbPanelContent>{{defResp.remarks}}</ng-template>
+                                                    </ngb-panel>
+                                                </ngb-accordion>
+                                            </span>
+                                        </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div  class="col-md-2">
+                    <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="backToCpDetails()">Back</button>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+

@@ -1,0 +1,338 @@
+<div class="loader-wrapper" *ngIf="showLoader">
+    <div class="loader-index"><span></span></div>
+    <svg>
+        <defs></defs>
+        <filter id="goo">
+            <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+            <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"> </fecolormatrix>
+        </filter>
+    </svg>
+</div>
+<app-breadcrumb [title]="'Document'" [items]="['Document']" [active_item]="'Document  Details'"></app-breadcrumb>
+<div class="container-fluid" *ngIf="!errorMsg">
+    <div class="row" *ngIf="this.anchorCounterParty">
+        <div class="col-sm-12" >
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card" (click)="getAnchors();" id="anchor" style="cursor: pointer;">
+                        <div class="card-body">
+                            <div class="media align-items-center">
+                                <div class="media-body right-chart-content" >
+                                    <i class="fa fa-users fa-5x" style="font-size: 6em; color: #2e3192; padding : 25px 0px 0px 185px;"></i>
+                                    <h4 style="padding: 25px 0px 0px 113px;">Anchor Count : {{anchorCount}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card" (click)="getCounterParty();" id="counterParty" style="cursor: pointer;">
+                        <div class="card-body">
+                            <div class="media align-items-center">
+                                <div class="media-body right-chart-content" >
+                                    <i class="fa fa-users fa-5x" style="font-size: 6em; color: #f09e1c; padding : 25px 0px 0px 185px;"></i>
+                                    <h4 style="padding: 25px 0px 0px 100px;">Counter Party Count : {{counterPartyCount}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="anchorDetails">
+        <div class="card-header">
+            <h5>Customers List</h5>
+            <div class="job-filter float-end row">
+                <div class="faq-form col-md-6">
+                    <input class="global-search form-control" type="text" (keyup)="anchorSearch($event)" placeholder="Search..">
+                    <app-feather-icons class="search-icon" [icon]="'search'"></app-feather-icons>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-mail text-center mb-0 mt-0 w-100" (click)="customerDashboard();" type="button"> Back </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body custom-datatable" style="overflow-y:auto;">
+            <div class="custom-datatable" >
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Anchor Name</th>
+                        <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">PAN</th>
+                        <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)">CIN</th>
+                        <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of anchorList let i=index;" (click)="viewAnchorDocument(anchorList[i].appId.customerInfoEntity.id);" style="cursor: pointer;">
+                        <td class="text-nowrap" *ngIf="anchorList[i].appId.type==1">{{anchorList[i].appId.customerInfoEntity.customerName}}</td>
+                        <td class="text-nowrap" *ngIf="anchorList[i].appId.type==1">{{anchorList[i].appId.customerInfoEntity.pan}}</td>
+                        <td class="text-nowrap" *ngIf="anchorList[i].appId.type==1">{{anchorList[i].appId.customerInfoEntity.cin}}</td>
+                        <td *ngIf="anchorList[i].appId.type==1">
+                            <span *ngIf="anchorList[i].appId.customerInfoEntity.status"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between p-2">
+                    <ngb-pagination
+                            [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" *ngIf="anchorViewDocument">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="card-body default-accordion" style="padding: 12px;">
+                <h5>Uploaded Documents</h5>
+                <ngb-accordion [closeOthers]="true" activeIds="static0" #acc="ngbAccordion" *ngFor="let reportDetails of anchorReport;let i=index">
+                    <ngb-panel  id="static{{i}}">
+                        <ng-template ngbPanelTitle>
+                            <div *ngIf="reportDetails.appType == 1;">
+                                Initial Onboarded Document
+                            </div>
+                            <div *ngIf="reportDetails.appType == 2;">
+                                Renewal Document {{reportDetails.wfType}}
+                            </div>
+                            <div *ngIf="reportDetails.appType == 3;">
+                                Enhancement Document {{reportDetails.wfType}}
+                            </div>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                            <div class="default-accordion" *ngFor="let docType of documentMaster;let i=index">
+                                <div *ngIf="docType.type == 1;">
+                                    <div *ngFor="let docCategory of docType.documentCategoryEntities;let j=index">
+                                        <h4 class="mt-2">{{docCategory.displayName}}</h4>
+                                        <div *ngFor="let documents of reportDetails.report;let j=index">
+                                            <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 0;">
+                                                <div>
+                                                    <label><b>{{documents.docList}}</b></label>
+                                                </div>
+                                                <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                    <div class="col-sm-10 mb-2">
+                                                        <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                    </div>
+                                                    <div class="col-sm-2 mb-2">
+                                                        <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.appId,documents.docCategoryName,documents.docListName,file.fileName);">
+                                                            <i class="mt-1 fa fa-cloud-download"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 1;">
+                                                <div>
+                                                    <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                                </div>
+                                                <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                    <div class="col-sm-10 mb-2">
+                                                        <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                    </div>
+                                                    <div class="col-sm-2 mb-2">
+                                                        <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.appId,documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                            <i class="mt-1 fa fa-cloud-download"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="viewAnchorDetails()">Back</button>
+            </div>
+        </div>
+    </div>
+
+<!--Counter Party-->
+    <div class="card" *ngIf="counterPartyDetails">
+        <div class="card-header">
+            <h5>CounterParty List</h5>
+            <div class="job-filter float-end row">
+                <div class="faq-form col-md-6">
+                    <input class="global-search form-control" type="text" (keyup)="counterPartySearch($event)"  placeholder="Search..">
+                    <app-feather-icons class="search-icon" [icon]="'search'"></app-feather-icons>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-mail text-center mb-0 mt-0 w-100" (click)="customerDashboard();" type="button"> Back </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body custom-datatable" style="overflow-y:auto;">
+            <div class="custom-datatable" >
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">CounterParty Name</th>
+                        <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">PAN</th>
+                        <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)">CIN</th>
+                        <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of counterPartyList let i=index;" (click)="viewCounterPartyDocument(counterPartyList[i].appId.customerInfoEntity.id);" style="cursor: pointer;">
+                        <td class="text-nowrap" *ngIf="counterPartyList[i].appId.type==2">{{counterPartyList[i].appId.customerInfoEntity.customerName}}</td>
+                        <td class="text-nowrap" *ngIf="counterPartyList[i].appId.type==2">{{counterPartyList[i].appId.customerInfoEntity.pan}}</td>
+                        <td class="text-nowrap" *ngIf="counterPartyList[i].appId.type==2">{{counterPartyList[i].appId.customerInfoEntity.cin}}</td>
+                        <td *ngIf="counterPartyList[i].appId.type==2"> <span *ngIf="counterPartyList[i].appId.customerInfoEntity.status"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" *ngIf="counterPartyViewDocument">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="card-body default-accordion" style="padding: 12px;">
+                    <h5>Uploaded Documents</h5>
+                    <ngb-accordion [closeOthers]="true" activeIds="static0" #acc="ngbAccordion" *ngFor="let reportDetails of counterPartyReport;let i=index">
+                        <ngb-panel id="static{{i}}">
+                            <ng-template ngbPanelTitle>
+                                <div *ngIf="reportDetails.appType == 1;">
+                                    Initial Onboarded Document
+                                </div>
+                                <div *ngIf="reportDetails.appType == 2;">
+                                    Renewal Document {{reportDetails.wfType}}
+                                </div>
+                                <div *ngIf="reportDetails.appType == 3;">
+                                    Enhancement Document {{reportDetails.wfType}}
+                                </div>
+                            </ng-template>
+                            <ng-template ngbPanelContent>
+                                <div class="default-accordion" *ngFor="let docType of documentMaster;let i=index">
+                                    <div *ngIf="docType.type == 2;">
+                                        <h4 class="mt-2">{{docType.displayName}}</h4>
+                                        <div *ngFor="let documents of reportDetails.report;let j=index">
+                                            <div class="card" style="padding:2%;" *ngIf="documents.docType==docType.displayName;">
+                                                <div>
+                                                    <label><b>{{documents.docList}}</b></label>
+                                                </div>
+                                                <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                    <div class="col-sm-10 mb-2">
+                                                        <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                    </div>
+                                                    <div class="col-sm-2 mb-2">
+                                                        <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.appId,documents.docTypeName,documents.docListName,file.fileName);">
+                                                            <i class="mt-1 fa fa-cloud-download"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="docType.type == 3;">
+                                        <h4 class="mt-2">{{docType.displayName}}</h4>
+                                        <div *ngFor="let documents of reportDetails.report;let j=index">
+                                            <div class="card" style="padding:2%;" *ngIf="documents.docType==docType.displayName;">
+                                                <div>
+                                                    <label><b>{{documents.docList}}</b></label>
+                                                </div>
+                                                <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                    <div class="col-sm-10 mb-2">
+                                                        <label  class="custom-file"  required="">{{file.fileName}}</label>
+                                                    </div>
+                                                    <div class="col-sm-2 mb-2">
+                                                        <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.appId,documents.docTypeName,documents.docListName,file.fileName);">
+                                                            <i class="mt-1 fa fa-cloud-download"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="docType.type == 4;">
+                                        <h4 class="mt-2">{{docType.displayName}}</h4>
+                                        <div *ngFor="let documents of reportDetails.report;let j=index">
+                                            <div class="card" style="padding:2%;" *ngIf="documents.docType==docType.displayName;">
+                                                <div>
+                                                    <label><b>{{documents.docList}}</b></label>
+                                                </div>
+                                                <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                    <div class="col-sm-10 mb-2">
+                                                        <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                    </div>
+                                                    <div class="col-sm-2 mb-2">
+                                                        <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.appId,documents.docTypeName,documents.docListName,file.fileName);">
+                                                            <i class="mt-1 fa fa-cloud-download"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="docType.type == 5;">
+                                        <div *ngFor="let docCategory of docType.documentCategoryEntities;let j=index">
+                                                <h4 class="mt-2">{{docCategory.displayName}}</h4>
+                                            <div *ngFor="let documents of reportDetails.report;let j=index">
+                                                <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 0;">
+                                                    <div>
+                                                        <label><b>{{documents.docList}}</b></label>
+                                                    </div>
+                                                    <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                        <div class="col-sm-10 mb-2">
+                                                            <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                        </div>
+                                                        <div class="col-sm-2 mb-2">
+                                                            <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.appId,documents.docCategoryName,documents.docListName,file.fileName);">
+                                                                <i class="mt-1 fa fa-cloud-download"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 1;">
+                                                    <div>
+                                                        <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                                    </div>
+                                                    <div class="row" *ngFor="let file of documents.fileNames;let l=index">
+                                                        <div class="col-sm-10 mb-2">
+                                                            <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                        </div>
+                                                        <div class="col-sm-2 mb-2">
+                                                            <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.appId,documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                                <i class="mt-1 fa fa-cloud-download"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="viewCpDetails()">Back</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="error-wrapper" *ngIf="errorMsg">
+    <div class="container"><img class="img-100" src="assets/images/other-images/sad.png" alt="">
+        <div class="error-heading">
+            <h2 class="headline font-warning">401</h2>
+        </div>
+        <div class="col-md-8 offset-md-2">
+            <p class="sub-content">The page you are attempting to reach is currently not available. This may be because the page does not exist or has been moved.</p>
+        </div>
+    </div>
+</div>
+
+
+

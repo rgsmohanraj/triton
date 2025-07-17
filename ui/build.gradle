@@ -1,0 +1,101 @@
+/*
+plugins {
+    id "com.github.node-gradle.node" version "3.5.0"
+}
+
+apply plugin: "com.github.node-gradle.node"
+*/
+
+group = "${proj_group}"
+version = "${proj_version}"
+
+task info {
+    doLast {
+        println 'This is angular frontend'
+    }
+}
+
+task cleanDist(type: Delete) {
+    group 'build client'
+    delete "${rootDir}/ui/dist"
+}
+
+
+task cleanNpm(type: Delete) {
+    group 'build client'
+    delete "${rootDir}/ui/node_modules"
+}
+
+
+task cleanNode(type: Delete) {
+    group 'build client'
+    delete "${rootDir}/ui/node"
+}
+def webappDir = "$rootDir/ui"
+task installAngular(type:Exec) {
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+        commandLine "npm.cmd", "install"
+    } else {
+        commandLine "npm", "install"
+    }
+}
+
+task buildAngular(type:Exec) {
+    // installAngular should be run prior to this task
+    dependsOn "installAngular"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    // Add task to the standard build group
+    group = BasePlugin.BUILD_GROUP
+    // ng doesn't exist as a file in windows -> ng.cmd
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+        commandLine "ng.cmd", "build"
+    } else {
+        commandLine "ng", "build"
+    }
+}
+
+task buildAngularProd(type:Exec) {
+    // installAngular should be run prior to this task
+    dependsOn "installAngular"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    // Add task to the standard build group
+    group = BasePlugin.BUILD_GROUP
+    // ng doesn't exist as a file in windows -> ng.cmd
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+        commandLine "ng.cmd", "build","--configuration", "production"
+    } else {
+        commandLine "ng", "build","--configuration", "production"
+    }
+}
+
+task buildAngularProdNOAOTBuildOptimizer(type:Exec) {
+    // installAngular should be run prior to this task
+    dependsOn "installAngular"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    // Add task to the standard build group
+    group = BasePlugin.BUILD_GROUP
+    // ng doesn't exist as a file in windows -> ng.cmd
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+        commandLine "ng.cmd", "build","--no-aot", "--no-build-optimizer","--base-href","./"
+    } else {
+        commandLine "ng", "build","--no-aot", "--no-build-optimizer","--base-href","./"
+    }
+}
+
+task tritonUIBuild(type: Zip) {
+    dependsOn "buildAngularProdNOAOTBuildOptimizer"
+    from "$webappDir/dist/triton"
+    group = BasePlugin.BUILD_GROUP
+    include '*'
+    include '*/*' //to include contents of a folder present inside Reports directory
+    archiveName "triton-ui-"+project.version+".zip"
+    destinationDir(file("$webappDir/dist/"))
+}
+
+//tritonUIBuild.shouldRunAfter buildAngularProdNOAOTBuildOptimizer

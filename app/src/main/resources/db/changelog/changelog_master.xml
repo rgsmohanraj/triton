@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+
+<!--    <include file="/db/changelog/changes/create-triton-table.sql"/>-->
+<!--    <include file="/db/changelog/changes/insert-triton-table-master.sql"/>-->
+<!--    <include file="/db/changelog/changes/Alter-Table-Deferral-Release.sql"/>-->
+<!--    <include file="/db/changelog/changes/Alter-Table-Multi-Anchor-Release.sql"/>-->
+<!--    <include file="/db/changelog/changes/Alter-Table-Anchor-Renewal-Enhancement.sql"/>-->
+<!--    <include file="/db/changelog/changes/Alter-Table-CounterParty-Renewal-Enhancement.sql"/>-->
+
+</databaseChangeLog>
+

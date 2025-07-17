@@ -1,0 +1,29 @@
+<div class="loader-wrapper" *ngIf="showLoader">
+    <div class="loader-index"><span></span></div>
+    <svg>
+        <defs></defs>
+        <filter id="goo">
+            <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+            <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"> </fecolormatrix>
+        </filter>
+    </svg>
+</div>
+<div class="container-fluid pt-5">
+    <div class="col-xl-12 xl-100 dashboard-sec box-col-12">
+        <div class="card earning-card">
+            <div class="card-body p-0">
+                <div class="row m-0">
+                    <div class="col-xl-3 earning-content p-0">
+                        <div class="row m-0 chart-left">
+                            <div class="col-xl-12 p-0 left_side_earning">
+                                <p class="font-dark">Version Details</p>
+                                <label> ## Triton Version V4.0</label>
+                            </div>
+                            <div>{{tableData}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

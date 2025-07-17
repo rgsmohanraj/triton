@@ -1,0 +1,1280 @@
+<!-- Loader starts-->
+<div class="loader-wrapper" *ngIf="showLoader">
+    <div class="loader-index"><span></span></div>
+    <svg>
+        <defs></defs>
+        <filter id="goo">
+            <fegaussianblur in="SourceGraphic" stddeviation="11" result="blur"></fegaussianblur>
+            <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"> </fecolormatrix>
+        </filter>
+    </svg>
+</div>
+<!-- Loader ends-->
+<style>
+.pane{
+width:100% !important;
+}
+</style>
+<app-breadcrumb [title]="'Anchor Details'" [items]="['Anchor']" [active_item]="'Anchor Details'" *ngIf="this.viewDetails==false"></app-breadcrumb>
+<h6 style="padding-top: 4%;padding-bottom: 2%;" *ngIf="this.viewDetails==true">{{anchorName}}</h6>
+<div class="container-fluid" *ngIf="this.errorMsg==false">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card" *ngIf="tableViewDetails">
+                <div class="card-header">
+                    <h5>Anchor List</h5>
+                    <div class="job-filter float-end row">
+                        <div class="col-md-4"> <button class="btn btn-primary btn-mail text-center mb-0 mt-0 w-100" [routerLink]="['/email/new-anchor']" type="button"><i
+                                class="fa fa-plus-square-o"></i> New Anchor</button></div>
+
+                        <div ngbDropdown class="d-inline-block col-md-3" placement="bottom">
+                            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle >Filter</button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button class="dropdown-item" (click)="statusTable(2)"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i>&nbsp; Active</button>
+                                <button class="dropdown-item" (click)="statusTable(0)"><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="right" ngbTooltip="In-Progress"></i>&nbsp;In-Progress</button>
+                                <button class="dropdown-item" (click)="statusTable(-2)"><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="In-Active"></i>&nbsp;Reject</button>
+                                <button class="dropdown-item" (click)="statusTable('clear')"><i class="fa fa-trash" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="Clear"></i>&nbsp; Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="faq-form col-md-5">
+                            <input class="form-control" [(ngModel)]="searchValue"  type="text" (keyup)="searAnchor($event);" placeholder="Search..">
+                            <app-feather-icons class="search-icon" [icon]="'search'"></app-feather-icons>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body custom-datatable" style="overflow-y:auto;">
+                    <div class="custom-datatable" >
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Anchor Name</th>
+                                    <th scope="col" class="text-nowrap" sortable="anchorName" (sort)="onSort($event)">PAN</th>
+                                    <th scope="col" class="text-nowrap" sortable="program" (sort)="onSort($event)">CIN</th>
+                                    <th scope="col" class="text-nowrap" sortable="status" (sort)="onSort($event)">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="searchAnchor == '' || searchAnchor==null || searchAnchor.length==0">
+                                <tr *ngFor="let item of anchorList; let i=index;" (click)="getAnchorAllAppIds(anchorList[i].appId.id,anchorList[i].appId.customerInfoEntity.id,anchorList[i].status);" style="cursor: pointer;">
+                                    <td class="text-nowrap" *ngIf="(anchorList[i].appId.type==1 && statusCheck == item.status) || (anchorList[i].appId.type==1 && statusCheck == 'clear')">{{anchorList[i].appId.customerInfoEntity.customerName}}</td>
+                                    <td class="text-nowrap" *ngIf="(anchorList[i].appId.type==1 && statusCheck == item.status) || (anchorList[i].appId.type==1 && statusCheck == 'clear')">{{anchorList[i].appId.customerInfoEntity.pan}}</td>
+                                    <td class="text-nowrap" *ngIf="(anchorList[i].appId.type==1 && statusCheck == item.status) || (anchorList[i].appId.type==1 && statusCheck == 'clear')">{{anchorList[i].appId.customerInfoEntity.cin}}</td>
+                                    <td *ngIf="(anchorList[i].appId.type==1 && statusCheck == item.status) || (anchorList[i].appId.type==1 && statusCheck == 'clear')">
+                                        <span *ngIf="item.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i></span>
+                                        <span *ngIf="item.status==-2" ><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="In-Active"></i></span>
+                                        <span *ngIf="item.status==0" ><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="right" ngbTooltip="In-Progress"></i></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tbody *ngIf="searchAnchor!='' || searchAnchor!=null || searchAnchor.length!=0">
+                                <tr *ngFor="let anchorSearch of anchorSearchList; let i=index;" (click)="getAnchorAllAppIds(anchorSearchList[i].appId.id,anchorSearchList[i].appId.customerInfoEntity.id,anchorSearchList[i].status);" style="cursor: pointer;">
+                                    <td class="text-nowrap" *ngIf="(anchorSearchList[i].appId.type==1 && statusCheck == anchorSearch.status) || (anchorSearchList[i].appId.type==1 && statusCheck == 'clear')">{{anchorSearchList[i].appId.customerInfoEntity.customerName}}</td>
+                                    <td class="text-nowrap" *ngIf="(anchorSearchList[i].appId.type==1 && statusCheck == anchorSearch.status) || (anchorSearchList[i].appId.type==1 && statusCheck == 'clear')">{{anchorSearchList[i].appId.customerInfoEntity.pan}}</td>
+                                    <td class="text-nowrap" *ngIf="(anchorSearchList[i].appId.type==1 && statusCheck == anchorSearch.status) || (anchorSearchList[i].appId.type==1 && statusCheck == 'clear')">{{anchorSearchList[i].appId.customerInfoEntity.cin}}</td>
+                                    <td *ngIf="(anchorSearchList[i].appId.type==1 && statusCheck == anchorSearch.status) || (anchorSearchList[i].appId.type==1 && statusCheck == 'clear')">
+                                        <span *ngIf="anchorSearch.status==2"><i class="fa fa fa-check-circle-o" style="color:#8ab34d;font-size: 20px !important;"  placement="right" ngbTooltip="Active"></i></span>
+                                        <span *ngIf="anchorSearch.status==-2" ><i class="fa fa-ban" style="color:#ff471a;font-size: 20px !important;"  placement="right" ngbTooltip="In-Active"></i></span>
+                                        <span *ngIf="anchorSearch.status==0" ><i class="fa fa-adjust" style="color:#ffcc00;font-size: 20px !important;"  placement="right" ngbTooltip="In-Progress"></i></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between p-2">
+                            <ngb-pagination
+                                    [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="viewDetailsAllAppIds">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card" >
+                        <div class="custom-datatable" >
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="text-nowrap" >Customer Name</th>
+                                    <th scope="col" class="text-nowrap" >Flow Type</th>
+                                    <th scope="col" class="text-nowrap" >Onboarded Date</th>
+                                    <th scope="col" class="text-nowrap" >Status</th>
+                                 </tr>
+                                </thead>
+                                <tbody >
+                                <tr *ngFor="let item of getAllAppId; let i=index;" (click)="anchorDetails(item.appId,item.customer,item.custId);" style="cursor: pointer;">
+                                    <td class="text-nowrap"  >{{item.customer}}</td>
+                                    <td class="text-nowrap" >
+                                        <span *ngIf="item.appType == 1" style="color:unset;">New</span>
+                                        <span *ngIf="item.appType == 2" style="color:unset;">Renewal</span>
+                                        <span *ngIf="item.appType == 3" style="color:unset;">Enhancement</span>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span *ngIf="item.defDate && !item.appDate" style="color:unset;">{{item.defDate}}</span>
+                                        <span *ngIf="!item.defDate && item.appDate" style="color:unset;">{{item.appDate}}</span>
+                                        <span *ngIf="!item.defDate && !item.appDate" style="color:unset;">-</span>
+                                    </td>
+                                    <td class="text-nowrap">{{item.status}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="tableDetails()">Back</button>
+                            </div>
+                            <div style="cursor:pointer;" class="leftTab mb-3 mt-3" (click)="popupForRE();" *ngIf="renewalEnhancement && reCheck"><i class="fa fa-refresh me-2" aria-hidden="true"></i>Renewal/Enhancement </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="viewDetails">
+                <div class="row">
+                    <div class="col-md-10">
+                                <div class="custom-datatable p-0" style="overflow-y:auto;">
+
+                                                <div class="card p-4 ">
+                                                    <div class="fw-bold form-group" >
+                                                        <label >Basic Details:</label>
+                                                        <hr>
+                                                    </div>
+                                                    <div *ngFor="let anchorBasic of fileUploadAnchorBasicList;  let i = index">
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Name</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.anchorName}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Industry</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.industry}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Sub Industry</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.sector}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>CIN</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.cin}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>PAN</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.pan}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Incorp Date</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.incorpDate}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Facility Tenure</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.businessExpiry}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Activity</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.activity}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Constitution</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorBasic.constitution}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div *ngFor="let anchorAddress of fileUploadAnchorAddressList;  let i = index">
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Address 1</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorAddress.addressLine1}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Address 2</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorAddress.addressLine2}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>City</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorAddress.city}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>State</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorAddress.state}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Country</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorAddress.country}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 fw-bold">
+                                                                <label>Pin code</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>{{anchorAddress.pinCode}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card p-4 " *ngFor="let anchorKey of fileUploadAnchorKeyList;  let i = index">
+                                                    <div class="fw-bold form-group" >
+                                                        <label >Key Person:</label>
+                                                        <hr>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" >
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorKey.type}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>CFO Name</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorKey.name}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>CFO Mobile</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorKey.mobile}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>CFO Email</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorKey.emailId}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card p-4 " >
+                                                    <div class="fw-bold form-group" >
+                                                        <label >Authorised Person:</label>
+                                                        <hr>
+                                                    </div>
+                                                    <div class="row" *ngFor="let anchorAuthorise of fileUploadAnchorAuthoriseList; let i = index" >
+                                                        <div class="col-md-12">
+                                                            <div class="row" >
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Name</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorAuthorise.name}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorAuthorise.type}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Mobile</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorAuthorise.mobile}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Email Address</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorAuthorise.emailId}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card p-4 " *ngFor="let anchorGst of fileUploadAnchorGstList;  let i = index">
+                                                    <div class="fw-bold form-group" >
+                                                        <label >GST Details :</label>
+                                                        <hr>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>GST Number</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.gstNumber}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>GST Acct Holder</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.gstAcctHolderName}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>GST Address 1</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.addressLine1}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>GST Address 2</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.addressLine2}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Country</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.country}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>State</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.state}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>City/District</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.city}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Pincode</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorGst.pincode}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card p-4 " *ngFor="let anchorProgramDetails of fileUploadAnchorProgramList;  let i = index">
+                                                    <div class="fw-bold form-group" >
+                                                        <div class="row">
+                                                            <label>{{anchorProgramDetails.subProduct}}:</label>
+                                                        </div>
+                                                        <hr>
+                                                    </div>
+
+                                                    <div class="row" >
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Funding Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.fundingType}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Overall Program Limit</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <span  class="suffix-rp">₹ </span>
+                                                                    <label>{{anchorProgramDetails.overallProgLimit}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Regular Program Limit</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <span  class="suffix-rp">₹ </span>
+                                                                    <label>{{anchorProgramDetails.regularProgLimit}}</label>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Adhoc Limit</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <span  class="suffix-rp">₹ </span>
+                                                                    <label>{{anchorProgramDetails.adhocProgLimit}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Anchor Onboarding  Date</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.anchorOnboardingDate}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>CP Min Limit</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <span  class="suffix-rp">₹ </span>
+                                                                    <label>{{anchorProgramDetails.cpMinLimit}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>CP Max Limit</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <span  class="suffix-rp">₹ </span>
+                                                                    <label>{{anchorProgramDetails.cpMaxLimit}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Pricing ROI Min</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.pricingRoiMin}}</label>
+                                                                    <span  class="suffix-rp">%</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Pricing ROI Max</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.pricingRoiMax}}</label>
+                                                                    <span  class="suffix-rp">%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Interest Application Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.interestAppTye}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Interest Ownership</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.interestOwnerShip}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Penal Interest Ownership</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.penalInterestOwnerShip}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Interest Payment Frequency</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.interestPaymentFrequency}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Penal Interest</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.penalInterest}}</label>
+                                                                    <span  class="suffix-rp">&nbsp;% &nbsp;</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Tenure</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.tenure}}</label>
+                                                                    <span  class="suffix-rp"> days</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Invoice Ageing</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.invoiceAgeing}}</label>
+                                                                    <span  class="suffix-rp"> days</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Door to Door</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.doorToDoor}}</label>
+                                                                    <span  class="suffix-rp"> days</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Funding Percent</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.fundingPercent}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Security Coverage Primary</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.securityCovgPrimary}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Security Coverage Secondary</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.securityCovgSecondry}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Processing Fee Min</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.processingFeesMin}}</label>
+                                                                    <span  class="suffix-rp">%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Processing Fee Max</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.processingFeesMax}}</label>
+                                                                    <span  class="suffix-rp">%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Interest Calculation</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.interestCalculation}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Counter Party Grace Period</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.counterPartyGracePeriod}}</label>
+                                                                    <span  class="suffix-rp"> days</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Maximum Drawdown</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.maxDrawdown}}</label>
+                                                                    <span  class="suffix-rp">%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Stop Supply Trigger Days</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.stopSupplyTriggerDays}}</label>
+                                                                    <span  class="suffix-rp"> days</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Repayment Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.repaymentType}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Program Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.programType}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Recourse Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.transactionType}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Review Frequency in Months</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.interimReviewFrequency}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Next review on date</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.nextInterimReviewOn}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Compound interest calculation</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.cmpdInt}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Compound interest calculation (Overdue)</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.cmpOvdInt}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Interest Rate</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.interestRate}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Product Expiry</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.productExpiry}}</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Product Expiry Date</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorProgramDetails.expiryDate}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card p-4 " *ngFor="let anchorBeneficiary of anchorBeneficiary;  let i = index">
+                                                    <div class="fw-bold form-group" >
+                                                        <label >Beneficiary Details:</label>
+                                                        <hr>
+                                                    </div>
+                                                    <div class="row" >
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Beneficiary Type</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorBeneficiary.benType}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Beneficiary Name</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorBeneficiary.benName}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Bank Name</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorBeneficiary.bankName}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Bank Account Number</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorBeneficiary.bankAcctNumber}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Bank Ifsc Code</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorBeneficiary.bankifscCode}}</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>Bank Branch</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{anchorBeneficiary.bankBranchName}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card p-4 " >
+                                                    <div class="fw-bold form-group" >
+                                                        <label >Credit Norms:</label>
+                                                        <hr>
+                                                    </div>
+                                                    <div *ngFor="let creditNorms of creditNormsList;  let i = index">
+                                                        <div class="col-md-12">
+                                                            <div class="row" >
+                                                                <div class="fw-bold col-md-6">
+                                                                    <label>{{creditNormsList[i].creditNormsMasterEntity.displayName}}</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>{{creditNorms.value}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                </div>
+                       <div class="col-md-2">
+                        <div class="mt-1"></div>
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="anchorFlowHistoryDetails()">Back</button>
+                            </div>
+                            <div style="cursor:pointer;" class="leftTab mb-3 mt-3" (click)="viewDocuments();"><i class="fa fa-folder-open me-2"></i>Documents</div>
+                            <div style="cursor:pointer;" class="leftTab mb-3 " (click)="getDefHistoryDocReports();getOtherDocDownload();getOtherDocMaster();"><i class="fa fa-history me-2" aria-hidden="true"></i>Deferral History </div>
+<!--                            <div style="cursor:pointer;" class="leftTab mb-3 " (click)="popupForRE();" *ngIf="renewalEnhancement"><i class="fa fa-refresh me-2" aria-hidden="true"></i>Renewal/Enhancement </div>-->
+                            <div  style="cursor:pointer;" class="leftTab " (click)="getRemarks();"><i class="fa fa-cogs me-2"></i>Workflow</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" *ngIf="viewDocument">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="default-accordion" *ngFor="let docType of documentMaster;let i=index">
+                            <div *ngIf="docType.type == 1;">
+                                <div *ngFor="let docCategory of docType.documentCategoryEntities;let j=index">
+                                    <h4 class="mt-2">{{docCategory.displayName}}</h4>
+                                    <div *ngFor="let documents of docReports;let j=index">
+                                        <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 0;">
+                                            <div>
+                                                <label><b>{{documents.docList}}</b></label>
+                                            </div>
+                                            <div class="row" *ngFor="let file of documents.fileNames;let j=index">
+                                                <div class="col-sm-10 mb-2">
+                                                    <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadDocument(documents.docCategoryName,documents.docListName,file.fileName);">
+                                                        <i class="mt-1 fa fa-cloud-download"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="padding:2%;" *ngIf="documents.docCategoryId==docCategory.id && documents.defType == 1;">
+                                            <div>
+                                                <label><b>{{documents.docList}}</b></label><label>&nbsp; - &nbsp; ({{documents.otherDoc}})</label>
+                                            </div>
+                                            <div class="row" *ngFor="let file of documents.fileNames;let j=index">
+                                                <div class="col-sm-10 mb-2">
+                                                    <label  class="custom-file" required="">{{file.fileName}}</label>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <button type="button" style="background-color:#51bb25 !important" class="btn btn-info me-2" (click)="downloadOtherDocument(documents.docCategoryName,documents.docListName,documents.otherDocName,file.fileName);">
+                                                        <i class="mt-1 fa fa-cloud-download"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mt-1"></div>
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="viewAnchorDetails()">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="deferralDocView">
+                    <h4 class="mt-2">Deferred Documents</h4>
+                    <div class="col-sm-10 card" style="padding: 2%;">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label  class="custom-file" required=""><b>Document Name</b></label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label  class="custom-file" required=""><b>ID</b></label>
+                            </div>
+                            <div class="col-sm-2">
+                                <label  class="custom-file" required=""><b>Completed Date</b></label>
+                            </div>
+                            <div class="col-sm-2">
+                                <label  class="custom-file" required=""><b>Proposed ETA</b></label>
+                            </div>
+                        </div>
+                        <div class="default-accordion" *ngFor="let deferral of deferralDocReportArray;let i=index">
+                            <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 1">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 2">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label  class="custom-file" required="">{{deferral.documentId}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.docCompletionDate}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 1 && deferral.deferral == 1">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <label  class="custom-file" required="">Others - {{deferral.displayName}}</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-sm-12" style="display:flex !important">
+                                <div *ngFor="let rmName of rmNameArray;let i=index">
+                                    <div *ngIf="rmName.email == rmNames">
+                                        <label><b>RM Name : </b></label>
+                                        <label> {{rmName.firstName}} {{rmName.lastName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div  *ngIf="deferralHistory">
+                <div class="row" *ngIf="deferralDocView">
+                    <div class="col-sm-10">
+                        <h4 class="mt-2">Deferral Documents History</h4>
+                        <div class="col-sm-12 card" style="padding: 1% 2% 2% 3%; margin-left: 1%;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label  class="custom-file" required=""><b>Document Name</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>ETA</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>Extend ETA</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>Status</b></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label  class="custom-file" required=""><b>Processed Date</b></label>
+                                </div>
+                            </div>
+
+                            <div class="default-accordion" *ngFor="let deferral of deferralDocReportArray;let i=index">
+                                <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 1">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.revisedTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.message}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.processedDate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 0 && deferral.deferral == 2">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label  class="custom-file" required="">{{deferral.docList}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.revisedTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.message}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.processedDate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding:2% 0% 2% 0%;" *ngIf="deferral.defType == 1 && deferral.deferral == 1">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label  class="custom-file" required="">Others - {{deferral.displayName}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.initialTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.revisedTime}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.message}}</label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label  class="custom-file" required="">{{deferral.processedDate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-sm-12" style="display:flex !important">
+                                    <div *ngFor="let rmName of rmNameArray;let i=index">
+                                        <div *ngIf="rmName.email == rmNames">
+                                            <label><b>RM Name : </b></label>
+                                            <label> {{rmName.firstName}} {{rmName.lastName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mt-1"></div>
+                        <div class="p-0">
+                            <div>
+                                <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="viewAnchorDetails()">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row" *ngIf="workFlowFlag">
+                    <div  class="col-md-10">
+                        <ul class="timeline" >
+                            <li  [ngClass]=" i%2==0 ? 'timeline-normal' : 'timeline-inverted'" *ngFor="let resp of workFlowArray;  let i = index">
+                                <div *ngIf="resp.status==2" class="timeline-badge">
+                                    <i *ngIf="resp.stage.stageId=='A1'" class="fa fa-user" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A2'" class="fa fa-align-justify" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A3'" class="fa fa-clipboard" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A4'" class="fa fa-edit" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A5'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A6'" class="fa fa-check" ></i>
+                                </div>
+                                <div *ngIf="resp.status==-1" class="timeline-badges-return">
+                                    <i *ngIf="resp.stage.stageId=='A1'" class="fa fa-user" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A2'" class="fa fa-align-justify" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A3'" class="fa fa-clipboard" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A4'" class="fa fa-edit" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A5'" class="fa fa-arrow-left" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A6'" class="fa fa-check" ></i>
+                                </div>
+                                <div *ngIf="resp.status==0" class="timeline-badges">
+                                    <i *ngIf="resp.stage.stageId=='A1'" class="fa fa-user" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A2'" class="fa fa-align-justify" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A3'" class="fa fa-clipboard" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A4'" class="fa fa-edit" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A5'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A6'" class="fa fa-check" ></i>
+                                </div>
+                                <div *ngIf="resp.status==-2" class="timeline-badges-reject">
+                                    <i *ngIf="resp.stage.stageId=='A1'" class="fa fa-user" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A2'" class="fa fa-align-justify" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A3'" class="fa fa-clipboard" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A4'" class="fa fa-edit" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A5'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="resp.stage.stageId=='A6'" class="fa fa-check" ></i>
+                                </div>
+
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <div *ngIf="resp.stage.stageId=='A1'" class="paras"><span class="spanheadingss">CREDIT</span></div>
+                                        <div *ngIf="resp.stage.stageId=='A2'" class="paras"><span class="spanheadingss">PROGRAM NORMS</span></div>
+                                        <div *ngIf="resp.stage.stageId=='A3'" class="paras"><span class="spanheadingss">CREDIT CHECKER</span></div>
+                                        <div *ngIf="resp.stage.stageId=='A4'" class="paras"><span class="spanheadingss">OPS MAKER</span></div>
+                                        <div *ngIf="resp.stage.stageId=='A5'" class="paras"><span class="spanheadingss">OPS CHECKER</span></div>
+                                        <div *ngIf="resp.stage.stageId=='A6'" class="paras"><span class="spanheadingss">DEFERRAL COMMITEE</span></div>
+                                    </div>
+                                    <div class="timeline-body">
+
+                                        <p class="para row"><span class="spanheading col-4">Owner </span><span class="col-8">: {{resp.approverInfo.substring(0,resp.approverInfo.indexOf('@'))}}</span></p>
+                                        <p class="para row" *ngIf="resp.status==2" ><span class="spanheading col-4">Status </span><span class="col-8">: Approved</span></p>
+                                        <p class="para row" *ngIf="resp.status==-1" ><span class="spanheading col-4">Status </span><span class="col-8">: Return</span></p>
+                                        <p class="para row" *ngIf="resp.status==0" ><span class="spanheading col-4">Status </span><span class="col-8">: Work In Progress</span></p>
+                                        <p class="para row" *ngIf="resp.status==-2" ><span class="spanheading col-4">Status </span><span class="col-8">: Reject</span></p>
+
+
+                                        <p class="para row" *ngIf="resp.createdTime;else elseResults">
+                                            <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{resp.createdTime.split(".")[0]}}</span>
+                                        </p>
+
+                                            <ng-template #elseResults >
+                                                <p class="para row">
+                                                <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{resp.date}}</span>
+                                                </p>
+                                            </ng-template>
+
+                                        <p class="para row" *ngIf="resp.updatedTime;else elseResult">
+                                            <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{resp.updatedTime.split(".")[0]}}</span>
+                                        </p>
+
+                                            <ng-template #elseResult>
+                                                <p class="para row">
+                                                <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{resp.date}}</span>
+                                                </p>
+                                            </ng-template>
+
+                                        <span>
+                                            <span class="card" style="margin-top:10px !important;margin-bottom:10px !important;">
+                                                <ngb-accordion >
+                                                    <ngb-panel>
+                                                        <ng-template ngbPanelTitle class="spanheading" > Remarks</ng-template>
+                                                        <ng-template ngbPanelContent>{{resp.remarks}}</ng-template>
+                                                    </ngb-panel>
+                                                </ngb-accordion>
+                                            </span>
+                                        </span>
+
+
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="timeline" >
+                            <li  [ngClass]=" i%2==0 ? 'timeline-normal' : 'timeline-inverted'" *ngFor="let defResp of deferralWorkFlowArray;  let i = index">
+                                <div *ngIf="defResp.status==2" class="timeline-badge">
+                                    <i *ngIf="defResp.stage.stageId=='DA1'" class="fa fa-edit" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA2'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA3'" class="fa fa-check" ></i>
+                                </div>
+                                <div *ngIf="defResp.status==-1" class="timeline-badges-return">
+                                    <i *ngIf="defResp.stage.stageId=='DA1'" class="fa fa-edit" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA2'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA3'" class="fa fa-check" ></i>
+                                </div>
+                                <div *ngIf="defResp.status==0" class="timeline-badges">
+                                    <i *ngIf="defResp.stage.stageId=='DA1'" class="fa fa-edit" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA2'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA3'" class="fa fa-check" ></i>
+                                </div>
+                                <div *ngIf="defResp.status==-2" class="timeline-badges-reject">
+                                    <i *ngIf="defResp.stage.stageId=='DA1'" class="fa fa-user" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA2'" class="fa fa-thumbs-o-up" ></i>
+                                    <i *ngIf="defResp.stage.stageId=='DA3'" class="fa fa-check" ></i>
+                                </div>
+
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <div *ngIf="defResp.stage.stageId=='DA1'" class="paras"><span class="spanheadingss">OPS MAKER</span></div>
+                                        <div *ngIf="defResp.stage.stageId=='DA2'" class="paras"><span class="spanheadingss">OPS CHECKER</span></div>
+                                        <div *ngIf="defResp.stage.stageId=='DA3'" class="paras"><span class="spanheadingss">DEFERRAL COMMITEE</span></div>
+                                    </div>
+                                    <div class="timeline-body">
+
+                                        <p class="para row"><span class="spanheading col-4">Owner </span><span class="col-8">: {{defResp.approverInfo.substring(0,defResp.approverInfo.indexOf('@'))}}</span></p>
+                                        <p class="para row" *ngIf="defResp.status==2" ><span class="spanheading col-4">Status </span><span class="col-8">: Approved</span></p>
+                                        <p class="para row" *ngIf="defResp.status==-1" ><span class="spanheading col-4">Status </span><span class="col-8">: Return</span></p>
+                                        <p class="para row" *ngIf="defResp.status==0" ><span class="spanheading col-4">Status </span><span class="col-8">: Work In Progress</span></p>
+                                        <p class="para row" *ngIf="defResp.status==-2" ><span class="spanheading col-4">Status </span><span class="col-8">: Reject</span></p>
+
+
+                                        <p class="para row" *ngIf="defResp.createdTime;else elseResults">
+                                            <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{defResp.createdTime.split(".")[0]}}</span>
+                                        </p>
+
+                                        <ng-template #elseResults >
+                                            <p class="para row">
+                                                <span class="spanheading col-4">Start date </span> <span class="col-8" style="color:black">: {{defResp.date}}</span>
+                                            </p>
+                                        </ng-template>
+
+                                        <p class="para row" *ngIf="defResp.updatedTime;else elseResult">
+                                            <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{defResp.updatedTime.split(".")[0]}}</span>
+                                        </p>
+
+                                        <ng-template #elseResult>
+                                            <p class="para row">
+                                                <span class="spanheading col-4">Completed date </span> <span class="col-8" style="color:black">: {{defResp.date}}</span>
+                                            </p>
+                                        </ng-template>
+
+                                        <span>
+                                            <span class="card" style="margin-top:10px !important;margin-bottom:10px !important;">
+                                                <ngb-accordion >
+                                                    <ngb-panel>
+                                                        <ng-template ngbPanelTitle class="spanheading" > Remarks</ng-template>
+                                                        <ng-template ngbPanelContent>{{defResp.remarks}}</ng-template>
+                                                    </ngb-panel>
+                                                </ngb-accordion>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary btn-mail text-center mb-2 mt-0" type="button" (click)="backToAnchorDetails()">Back</button>
+                    </div>
+                </div>
+            </div>
+
+
+<div class="error-wrapper" *ngIf="this.errorMsg==true">
+    <div class="container"><img class="img-100" src="assets/images/other-images/sad.png" alt="">
+        <div class="error-heading">
+            <h2 class="headline font-warning">401</h2>
+        </div>
+        <div class="col-md-8 offset-md-2">
+            <p class="sub-content">The page you are attempting to reach is currently not available. This may be because the page does not exist or has been moved.</p>
+        </div>
+    </div>
+</div>
+

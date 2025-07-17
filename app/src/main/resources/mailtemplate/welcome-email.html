@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spring boot email template with Thymeleaf</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto'
+          rel='stylesheet' type='text/css' />
+    <!-- use the font -->
+
+    <link rel="stylesheet" type="text/css" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div>Dear <strong><span th:text="${name}"></span></strong>!!!,</div>
+            <br>
+            <div>
+                <p>XYZ <span th:text="${content}"></span></p>
+            </div>
+            <div>
+                <table class="table table-bordered table-sm">
+                    <tr>
+                        <div class="row">
+                            <div class="col-6">
+                                <td>Anchor Name</td>
+                            </div>
+                            <div class="col-6">
+                                <td>&lt;<span th:text="${name}"></span>&gt;</td>
+                            </div>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="row">
+                            <div class="col-6">
+                                <td>Reference ID</td>
+                            </div>
+                            <div class="col-6">
+                                <td>&lt;<span th:text="${id}"></span>&gt;</td>
+                            </div>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="row">
+                            <div class="col-6">
+                                <td>Created Date</td>
+                            </div>
+                            <div class="col-6">
+                                <td>&lt;<span th:text="${date}"></span>&gt;</td>
+                            </div>
+                        </div>
+                    </tr>
+                </table>
+                <br>
+                <div>
+                    <strong><i>Regards,</i> </strong><br>
+                    <em th:text="TRITON"></em>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

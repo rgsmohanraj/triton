@@ -1,0 +1,27 @@
+Anchor
+
+Karthick - 1(Anchor onboard),2(Credit Norms)
+Nagaraj - 4(Ops maker-Beneficiary)
+Pavithra - 4(Ops Maker-Document upload)
+Priya - 5(Ops checker)
+
+Counterparty
+
+priya - 1,2,7
+karthick - 3,4
+Durga - 5,6
+
+
+Counter party
+-------------
+1)Business - CP basic details
+2)Underwriter - Assign(Log in as Cpa_lead)
+3)Credit CPA - Soft policy(Cpa_lead)
+4)Underwriter override - Approve(credit head_lead)
+5)CAM Upload - Debt profile,CAM upload(cpa_lead)
+6)Underwriter review - Limit Eligibility,Term sheet,Collateral,Credit policy(credit_head_lead)
+7)Underwriter PD review - Due Diligence(credit_head_lead)
+8)Commercial/credit - Commercial & Credit cc approval(credit_head_lead)
+9)RM Customer acceptance - Commercial cc(Business_lead)
+10)Operation maker
+11)Operation Checker

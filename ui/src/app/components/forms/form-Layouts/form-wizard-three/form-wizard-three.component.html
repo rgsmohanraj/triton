@@ -1,0 +1,201 @@
+<app-breadcrumb [title]="'New Counter Party'" [items]="['Counter Party']" [active_item]="'New Counter Party'"></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <aw-wizard navBarLayout="large-filled-symbols">
+            <aw-wizard-step>
+              <form>
+                <ng-template awWizardStepSymbol>
+                  <div class="f1-step">
+                    <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+                    <p>Business</p>
+                  </div>
+                </ng-template>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label >PAN Number</label>
+                      <input class="form-control" type="text" name ="pan" [(ngModel)]="pan">
+                    </div>
+                    <div class="form-group">
+                      <label>Name Of The Entity</label>
+                      <input class="form-control" type="text" name ="name" [(ngModel)]="name">
+                    </div>
+                    <div class="form-group">
+                      <label>Constitution</label>
+                      <input class="form-control" type="text" name ="constitution" [(ngModel)]="constitution">
+                    </div>
+                    <div class="form-group">
+                      <label>State</label>
+                        <select class="form-select form-control" name ="state" [(ngModel)]="state">
+                          <option selected="">Select State</option>
+                          <option value="1">Tamilnadu</option>
+                          <option value="2">Kerala</option>
+                          <option value="3">Andhra Pradhesh</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                      <label>City</label>
+                      <select class="form-select form-control" name ="city" [(ngModel)]="city">
+                        <option selected="">Select City</option>
+                        <option value="1">Chennai</option>
+                        <option value="2">Trichy</option>
+                        <option value="3">Tanjavore</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Source</label>
+                      <select class="form-select form-control" name ="source" [(ngModel)]="source">
+                        <option selected="">Select Source</option>
+                        <option value="1">Source 1</option>
+                        <option value="2">Source 2</option>
+                        <option value="3">Source 3</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Sub-Source</label>
+                      <select class="form-select form-control" name ="subSource" [(ngModel)]="subSource">
+                        <option selected="">Select Sub-Source</option>
+                        <option value="1">Sub-Source 1</option>
+                        <option value="2">Sub-Source 2</option>
+                        <option value="3">Sub-Source 3</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>RM Name</label>
+                      <input class="form-control" type="text" placeholder="RM Name" name ="rmName" [(ngModel)]="rmName" disabled>
+                    </div>
+                    <div class="form-group">
+                      <label>Customer Contact Name</label>
+                      <input class="form-control" type="text" name ="customerName" [(ngModel)]="customerName">
+                    </div>
+                    <div class="form-group">
+                      <label>Customer Contact Mobile</label>
+                      <input class="form-control" type="text" name ="customerMob" [(ngModel)]="customerMob">
+                    </div>
+                    <div class="form-group">
+                      <label>Customer Contact Email</label>
+                      <input class="form-control" type="text" name ="customerEmail" [(ngModel)]="customerEmail">
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-primary pull-right" type="submit" awNextStep
+                       >Next</button>
+              </form>
+            </aw-wizard-step>
+            <aw-wizard-step>
+              <form>
+                <ng-template awWizardStepSymbol>
+                  <div class="f1-step">
+                    <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+                    <p>CPA P1</p>
+                  </div>
+                </ng-template>
+                <div class="card">
+                  <div class="card-header">
+                  </div>
+                  <div class="card-body">
+                    <ngx-tabset type="pills" class="tabbed-card">
+                      <ngx-tab tabTitle="Home" class="nav nav-pills nav-primary">
+                        <div class="tab-pane fade show">
+                          <div class="form-group">
+                            <label for="name">First Name</label>
+                            <input class="form-control" id="name" type="text" placeholder="Johan" name="firstName" [(ngModel)]="firstName"
+                                   onlyAlphabets>
+                          </div>
+                          <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input class="form-control" id="lname" type="text" placeholder="Deo" name="lastName" [(ngModel)]="lastName"
+                                   onlyAlphabets>
+                          </div>
+                        </div>
+                      </ngx-tab>
+                      <ngx-tab tabTitle="Profile"  nav class="nav-pills nav-primary"  [bypassDOM]="true">
+                        <ng-template>
+                          <div class="tab-pane fade show">
+                            <div class="form-group">
+                              <label for="name">First Name</label>
+                              <input class="form-control" id="name1" type="text" placeholder="Johan" name="firstName" [(ngModel)]="firstName"
+                                     onlyAlphabets>
+                            </div>
+                            <div class="form-group">
+                              <label for="lname">Last Name</label>
+                              <input class="form-control" id="lname1" type="text" placeholder="Deo" name="lastName" [(ngModel)]="lastName"
+                                     onlyAlphabets>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </ngx-tab>
+                      <ngx-tab tabTitle="Contact" nav class="nav-pills nav-primary" >
+                        <div class="tab-pane fade show">
+                          <div class="form-group">
+                            <label for="name">First Name</label>
+                            <input class="form-control" id="name2" type="text" placeholder="Johan" name="firstName" [(ngModel)]="firstName"
+                                   onlyAlphabets>
+                          </div>
+                          <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input class="form-control" id="lname2" type="text" placeholder="Deo" name="lastName" [(ngModel)]="lastName"
+                                   onlyAlphabets>
+                          </div>
+                        </div>
+                      </ngx-tab>
+                    </ngx-tabset>
+                  </div>
+                </div>
+                <button class="btn btn-primary pull-right" type="submit" awNextStep
+                >Next</button>
+              </form>
+            </aw-wizard-step>
+            <aw-wizard-completion-step awEnableBackLinks>
+              <form [formGroup]="thirdFormGroup">
+                <ng-template awWizardStepSymbol>
+                  <div class="f1-step">
+                    <div class="f1-step-icon"><i class="fa fa-twitter"></i></div>
+                    <p>Birth Date</p>
+                  </div>
+                </ng-template>
+                <div class="form-group">
+                  <label class="sr-only">DD</label>
+                  <input class="form-control" id="dd" type="number" placeholder="dd" formControlName="dd" onlyNumbers>
+                  <ng-container class="invalid"
+                                *ngIf="thirdFormGroup.get('dd').hasError('required') && thirdFormGroup.get('dd').touched">
+                    Day is required</ng-container>
+                  <ng-container class="invalid"
+                                *ngIf="thirdFormGroup.get('dd').hasError('pattern') && thirdFormGroup.get('dd').touched">
+                    Day Should be Only two characters</ng-container>
+                </div>
+                <div class="form-group">
+                  <label class="sr-only">MM</label>
+                  <input class="form-control" id="mm" type="number" placeholder="mm" formControlName="mm" onlyNumbers>
+                  <ng-container class="invalid"
+                                *ngIf="thirdFormGroup.get('mm').hasError('required') && thirdFormGroup.get('mm').touched">
+                    Month is required</ng-container>
+                  <ng-container class="invalid"
+                                *ngIf="thirdFormGroup.get('mm').hasError('pattern') && thirdFormGroup.get('mm').touched">
+                    Month Should be Only two characters</ng-container>
+                </div>
+                <div class="form-group">
+                  <label class="sr-only">YYYY</label>
+                  <input class="form-control" id="yyyy" type="number" placeholder="yyyy" formControlName="yyyy"
+                         onlyNumbers>
+                  <ng-container class="invalid"
+                                *ngIf="thirdFormGroup.get('yyyy').hasError('required') && thirdFormGroup.get('yyyy').touched">
+                    Year is required</ng-container>
+                  <ng-container class="invalid"
+                                *ngIf="thirdFormGroup.get('yyyy').hasError('pattern') && thirdFormGroup.get('yyyy').touched">
+                    Year Should be Only 4 characters</ng-container>
+                </div>
+                <button class="btn btn-success pull-right" type="button" (click)="finish()"
+                        [disabled]="!thirdFormGroup.valid">Finish</button>
+                <button class="btn btn-secondary pull-right me-1" id="prevBtn" type="button" awPreviousStep>Previous</button>
+              </form>
+            </aw-wizard-completion-step>
+          </aw-wizard>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

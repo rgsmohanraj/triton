@@ -1,0 +1,554 @@
+<!--<app-breadcrumb [title]="'Overview'" [items]="['Dashboard']" [active_item]="'Overview'"></app-breadcrumb>-->
+<!--<div class="container-fluid">-->
+<!--    <div class="row second-chart-list third-news-update">-->
+<!--        <div class="col-xl-4 col-lg-12 xl-30 morning-sec box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-2" style="color:green;"><app-feather-icons [icon]="'circle'"></app-feather-icons></div>-->
+<!--                        <div class="col-md-10">Live Programs</div>-->
+<!--                    </div>-->
+<!--                    <div class="float-end fw-bold">22</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-8 xl-100 dashboard-sec box-col-12">-->
+<!--            <div class="card earning-card">-->
+<!--                <div class="card-body p-0">-->
+<!--                    <div class="row m-0">-->
+<!--                        <div class="col-xl-3 earning-content p-0">-->
+<!--                            <div class="row m-0 chart-left">-->
+<!--                                <div class="col-xl-12 p-0 left_side_earning">-->
+<!--                                    <h5>Dashboard</h5>-->
+<!--                                    <p class="font-roboto">Overview of last month</p>-->
+<!--                                </div>-->
+<!--                                <div class="col-xl-12 p-0 left_side_earning">-->
+<!--                                    <h5>₹4055.56 Cr</h5>-->
+<!--                                    <p class="font-roboto">Disbursed Amount</p>-->
+<!--                                </div>-->
+<!--                                <div class="col-xl-12 p-0 left_side_earning">-->
+<!--                                    <h5>₹1004.11 Cr</h5>-->
+<!--                                    <p class="font-roboto">Collection Amount</p>-->
+<!--                                </div>-->
+<!--                                <div class="col-xl-12 p-0 left_side_earning">-->
+<!--                                    <h5>90%</h5>-->
+<!--                                    <p class="font-roboto">Disbursements vs Collections</p>-->
+<!--                                </div>-->
+<!--                                <div class="col-xl-12 p-0 left-btn">-->
+<!--&lt;!&ndash;                                    <a class="btn btn-gradient">Summary</a>&ndash;&gt;-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-xl-9 p-0">-->
+<!--                            <div class="chart-right">-->
+<!--                                <div class="row m-0 p-tb">-->
+<!--                                    <div class="col-xl-8 col-md-8 col-sm-8 col-12 p-0">-->
+<!--                                        <div class="inner-top-left">-->
+<!--                                            <ul class="d-flex list-unstyled">-->
+<!--                                                <li>Daily</li>-->
+<!--                                                <li >Weekly</li>-->
+<!--                                                <li class="active">Monthly</li>-->
+<!--                                                <li>Yearly</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 p-0 justify-content-end">-->
+<!--                                        <div class="inner-top-right">-->
+<!--                                            <ul class="d-flex list-unstyled justify-content-end">-->
+<!--                                                <li>Disbursements</li>-->
+<!--                                                <li>Collections</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-xl-12">-->
+<!--                                        <div class="card-body p-0">-->
+<!--                                            <div class="current-sale-container">-->
+<!--                                                <div id="chart-currently">-->
+<!--                                                    <apx-chart [series]='currentSales.series'-->
+<!--                                                               [chart]='currentSales.chart'-->
+<!--                                                               [dataLabels]='currentSales.dataLabels'-->
+<!--                                                               [stroke]='currentSales.stroke'-->
+<!--                                                               [xaxis]='currentSales.xaxis'-->
+<!--                                                               [markers]='currentSales.markers'-->
+<!--                                                               [yaxis]='currentSales.yaxis'-->
+<!--                                                               [grid]='currentSales.grid'-->
+<!--                                                               [colors]='currentSales.colors'-->
+<!--                                                               [fill]='currentSales.fill'-->
+<!--                                                               [legend]='currentSales.legend'-->
+<!--                                                               [tooltip]='currentSales.tooltip'>-->
+<!--                                                    </apx-chart>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row border-top m-0">-->
+<!--                                <div class="col-xl-4 ps-0 col-md-6 col-sm-6">-->
+<!--                                    <div class="media p-0">-->
+<!--                                        <div class="media-left"><i class="icofont icofont-crown"></i></div>-->
+<!--                                        <div class="media-body">-->
+<!--                                            <h6>Disbursed Invoices</h6>-->
+<!--                                            <p>₹2900.16 Cr</p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-xl-4 col-md-6 col-sm-6">-->
+<!--                                    <div class="media p-0">-->
+<!--                                        <div class="media-left bg-secondary"><i class="icofont icofont-heart-alt"></i>-->
+<!--                                        </div>-->
+<!--                                        <div class="media-body">-->
+<!--                                            <h6>Disbursed Po's</h6>-->
+<!--                                            <p>₹1155.4 Cr</p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                &lt;!&ndash;                                <div class="col-xl-4 col-md-12 pe-0">&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                    <div class="media p-0">&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                        <div class="media-left"><i class="icofont icofont-cur-dollar"></i></div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                        <div class="media-body">&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                            <h6>Sales forcasting</h6>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                            <p>₹9,478.50 </p>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                        </div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-9 xl-100 chart_data_left box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body p-0">-->
+<!--                    <div class="row m-0 chart-main">-->
+<!--                        <div class="col-xl-3 col-md-6 col-sm-6 p-0 box-col-6">-->
+<!--                            <div class="media align-items-center">-->
+<!--                                <div class="hospital-small-chart">-->
+<!--                                    <div class="small-bar">-->
+<!--                                        <div class="small-chart">-->
+<!--                                            <x-chartist-->
+<!--                                                    [type]='smallBarCharts.type'-->
+<!--                                                    [data]='smallBarCharts.data'-->
+<!--                                                    [options]='smallBarCharts.options'-->
+<!--                                                    [events]='smallBarCharts.events'>-->
+<!--                                            </x-chartist>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="media-body">-->
+<!--                                    <div class="right-chart-content">-->
+<!--                                        <h4>124</h4><span>Overall Client's </span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-xl-3 col-md-6 col-sm-6 p-0 box-col-6">-->
+<!--                            <div class="media align-items-center">-->
+<!--                                <div class="hospital-small-chart">-->
+<!--                                    <div class="small-bar">-->
+<!--                                        <div class="small-chart1">-->
+<!--                                            <x-chartist-->
+<!--                                                    [type]='smallBarCharts.type'-->
+<!--                                                    [data]='smallBarCharts.data'-->
+<!--                                                    [options]='smallBarCharts.options'-->
+<!--                                                    [events]='smallBarCharts.events'>-->
+<!--                                            </x-chartist>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="media-body">-->
+<!--                                    <div class="right-chart-content">-->
+<!--                                        <h4>15</h4><span>Anchors</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-xl-3 col-md-6 col-sm-6 p-0 box-col-6">-->
+<!--                            <div class="media align-items-center">-->
+<!--                                <div class="hospital-small-chart">-->
+<!--                                    <div class="small-bar">-->
+<!--                                        <div class="small-chart2">-->
+<!--                                            <x-chartist-->
+<!--                                                    [type]='smallBarCharts.type'-->
+<!--                                                    [data]='smallBarCharts.data'-->
+<!--                                                    [options]='smallBarCharts.options'-->
+<!--                                                    [events]='smallBarCharts.events'>-->
+<!--                                            </x-chartist>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="media-body">-->
+<!--                                    <div class="right-chart-content">-->
+<!--                                        <h4>88</h4><span>Vendors</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-xl-3 col-md-6 col-sm-6 p-0 box-col-6">-->
+<!--                            <div class="media border-none align-items-center">-->
+<!--                                <div class="hospital-small-chart">-->
+<!--                                    <div class="small-bar">-->
+<!--                                        <div class="small-chart3">-->
+<!--                                            <x-chartist-->
+<!--                                                    [type]='smallBarCharts.type'-->
+<!--                                                    [data]='smallBarCharts.data'-->
+<!--                                                    [options]='smallBarCharts.options'-->
+<!--                                                    [events]='smallBarCharts.events'>-->
+<!--                                            </x-chartist>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="media-body">-->
+<!--                                    <div class="right-chart-content">-->
+<!--                                        <h4>21</h4><span>Dealers</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        <div class="col-xl-3 xl-50 chart_data_right box-col-12">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="media align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="media-body right-chart-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h4>₹1025 Cr<span class="new-box"></span></h4><span>Overall Disbursed</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div id="knob"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="col-xl-3 xl-50 chart_data_right second d-none">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="media align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="media-body right-chart-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h4>₹987 Cr<span class="new-box"></span></h4><span>Overall Collected</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div id="knob-right"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div class="col-xl-4 xl-50 news box-col-6">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="header-top">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <h5 class="m-0">News & Update</h5>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-header-right-icon">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <select class="button btn btn-primary">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Today</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Tomorrow</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Yesterday</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </select>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-body p-0">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="news-update">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <h6>36% off For pixel lights Couslations Types.</h6><span>Lorem Ipsum is simply dummy...</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="news-update">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <h6>We are produce new product this</h6><span> Lorem Ipsum is simply text of the printing...&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="news-update">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <h6>50% off For COVID Couslations Types.</h6><span>Lorem Ipsum is simply dummy...</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-footer">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="bottom-btn"><a href="#">More...</a></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div class="col-xl-4 xl-50 appointment-sec box-col-6">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="row">&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="col-xl-12 appointment">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="card">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-header card-no-border">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="header-top">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <h5 class="m-0">appointment</h5>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="card-header-right-icon">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <select class="button btn btn-primary">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <option>Today</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <option>Tomorrow</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <option>Yesterday</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    </select>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-body pt-0">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="appointment-table table-responsive">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <table class="table table-bordernone">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <tbody>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <tr>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <img class="img-fluid img-40 rounded-circle mb-3" src="assets/images/appointment/app-ent.jpg" alt="Image description">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <div class="status-circle bg-primary"></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td class="img-content-box">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <span class="d-block">Venter Loren</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <span class="font-roboto">Now</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <p class="m-0 font-primary">28 Sept</p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td class="text-end">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <div class="button btn btn-primary">Done&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                    <i class="fa fa-check-circle ms-2"></i>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        </tr>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <tr>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <img class="img-fluid img-40 rounded-circle" src="assets/images/appointment/app-ent.jpg" alt="Image description">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <div class="status-circle bg-primary"></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td class="img-content-box">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <span class="d-block">John Loren</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <span class="font-roboto">11:00</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <p class="m-0 font-primary">22 Sept</p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            <td class="text-end">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                <div class="button btn btn-danger">Pending&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                    <i class="fa fa-check-circle ms-2"></i>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        </tr>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    </tbody>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </table>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="col-xl-12 alert-sec">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="card bg-img">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-header">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="header-top">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <h5 class="m-0">Alert </h5>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="dot-right-icon"><i class="fa fa-ellipsis-h"></i></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-body">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="body-bottom">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <h6> 10% off For drama lights Couslations...</h6><span class="font-roboto">Lorem Ipsum&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    is simply dummy...It is a long established fact that a reader will be distracted by&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div class="col-xl-4 xl-50 notification box-col-6">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-header card-no-border">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="header-top">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <h5 class="m-0">notification</h5>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-header-right-icon">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <select class="button btn btn-primary">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Today</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Tomorrow</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Yesterday</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </select>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-body pt-0">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="media">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media-body">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <p>20-04-2020 <span>10:10</span></p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <h6>Updated Product<span class="dot-notification"></span></h6>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <span>Quisque a consequat ante sit amet magna...</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="media">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media-body">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <p>20-04-2020<span class="ps-1">Today</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <span class="badge badge-secondary">New</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <h6>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                Tello just like your product <span class="dot-notification"></span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </h6>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <span>Quisque a consequat ante sit amet magna... </span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="media">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media-body">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="d-flex mb-3">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="inner-img">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <img class="img-fluid" src="assets/images/notification/1.jpg" alt="Product-1">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="inner-img">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <img class="img-fluid" src="assets/images/notification/2.jpg" alt="Product-2">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <span class="mt-3">Quisque a consequat ante sit amet magna...</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div class="col-xl-4 xl-50 appointment box-col-6">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="header-top">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <h5 class="m-0">Market Value</h5>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="card-header-right-icon">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <select class="button btn btn-primary">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Year</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Month</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <option>Day</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </select>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-Body">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="radar-chart">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div id="marketchart">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <apx-chart &ndash;&gt;-->
+<!--        &lt;!&ndash;                                [chart]='marketValue.chart'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [series]='marketValue.series'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [stroke]='marketValue.stroke'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [labels]='marketValue.labels'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [plotOptions]='marketValue.plotOptions'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [colors]='marketValue.colors'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [markers]='marketValue.markers'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [tooltip]='marketValue.tooltip'&ndash;&gt;-->
+<!--        &lt;!&ndash;                                [yaxis]='marketValue.yaxis'>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </apx-chart>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div class="col-xl-4 xl-100 chat-sec box-col-6">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="card chat-default">&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-header card-no-border">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="media media-dashboard">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media-body">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <h5 class="mb-0">Chat</h5>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="icon-box"><i class="fa fa-ellipsis-h"></i></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="card-body chat-box">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <div class="chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media left-side-chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="media-body d-flex">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="img-profile"> &ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <img class="img-fluid" src="assets/images/User.jpg" alt="Profile">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="main-chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <div class="message-main">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <span class="mb-0">Hi deo, Please send me link.</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <div class="sub-message message-main"><span class="mb-0">Right Now</span></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <p class="f-w-400">7:28 PM</p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media right-side-chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <p class="f-w-400">7:28 PM</p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="media-body text-end">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="message-main pull-right">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <span class="mb-0 text-start">How can do for you</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <div class="clearfix"></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media left-side-chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="media-body d-flex">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="img-profile"> &ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <img class="img-fluid" src="assets/images/User.jpg" alt="Profile">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="main-chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <div class="sub-message message-main mt-0"><span>It's urgently</span></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <p class="f-w-400">7:28 PM</p>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="media right-side-chat">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="media-body text-end">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                <div class="message-main pull-right">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    <span class="loader-span mb-0 text-start" id="wave">&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <span class="dot"></span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <span class="dot"></span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        <span class="dot"></span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                    </span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <div class="input-group">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <input class="form-control" id="mail" type="text" placeholder="Type Your Message..." name="text">&ndash;&gt;-->
+<!--        &lt;!&ndash;                            <div class="send-msg"><i data-feather="send"></i></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        <div class="col-xl-4 col-lg-12 xl-30 morning-sec box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-2" style="color:brown;"><app-feather-icons [icon]="'check-circle'"></app-feather-icons></div>-->
+<!--                        <div class="col-md-10">Commercial Finalized</div>-->
+<!--                    </div>-->
+<!--                    <div class="float-end fw-bold">13</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-4 col-lg-12 xl-30 morning-sec box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-2" style="color:brown;"><app-feather-icons [icon]="'minimize-2'"></app-feather-icons></div>-->
+<!--                        <div class="col-md-10">Discussion in Progress</div>-->
+<!--                    </div>-->
+<!--                    <div class="float-end fw-bold">12</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-4 col-lg-12 xl-30 morning-sec box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-2" style="color:brown;"><app-feather-icons [icon]="'arrow-up'"></app-feather-icons></div>-->
+<!--                        <div class="col-md-10">Up for Disbursement</div>-->
+<!--                    </div>-->
+<!--                    <div class="float-end fw-bold">2.89 Cr</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-4 col-lg-12 xl-30 morning-sec box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-2" style="color:orange;"><app-feather-icons [icon]="'clock'"></app-feather-icons></div>-->
+<!--                        <div class="col-md-10">Due for Payment</div>-->
+<!--                    </div>-->
+<!--                    <div class="float-end fw-bold">415 Cr</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-4 col-lg-12 xl-30 morning-sec box-col-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-2" style="color:green;"><app-feather-icons [icon]="'circle'"></app-feather-icons></div>-->
+<!--                        <div class="col-md-10">Limits up for Renewal</div>-->
+<!--                    </div>-->
+<!--                    <div class="float-end fw-bold">5</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

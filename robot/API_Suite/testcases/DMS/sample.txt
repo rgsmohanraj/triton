@@ -1,0 +1,1 @@
+{"appId":9345,"docTypeId":16130,"docTypeName":"anchorDocuments","docCategoryId":16131,"docCategoryName":"kycDocuments","docListId":16135,"docListName":"AOA","fileName":"sample.txt",key:2}

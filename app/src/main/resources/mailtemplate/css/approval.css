@@ -1,0 +1,387 @@
+/* screen - approval */
+
+.approval {
+  align-items: center;
+  background-color: var(--white);
+  border: 1px none;
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  overflow: hidden;
+  width: 600px;
+}
+
+.approval .group-9399 {
+  align-items: flex-start;
+  align-self: flex-start;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: -11.0px;
+  min-width: 611px;
+}
+
+.approval .overlap-group1 {
+  background: linear-gradient(240deg, rgb(9.26, 4.25, 255) 0%, rgb(255, 4.25, 229.92) 100%);
+  height: 72px;
+  position: relative;
+  width: 600px;
+}
+
+.approval .overlap-group {
+  height: 44px;
+  left: 164px;
+  position: absolute;
+  top: 14px;
+  width: 271px;
+}
+
+.approval .group-61 {
+  align-items: flex-start;
+  display: flex;
+  gap: 36px;
+  height: 44px;
+  left: 0;
+  min-width: 271px;
+  position: absolute;
+  top: 0;
+}
+
+.approval .image-1 {
+  height: 44px;
+  object-fit: cover;
+  width: 118px;
+}
+
+.approval .group-43 {
+  align-items: center;
+  display: flex;
+  gap: 11px;
+  min-width: 117px;
+  padding: 0 0.0px;
+}
+
+.approval .microsoft-teams-image-1 {
+  height: 44px;
+  object-fit: cover;
+  width: 42px;
+}
+
+.approval .triton {
+  color: var(--white);
+  font-family: var(--font-family-kumbh_sans);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: 0.35px;
+  min-height: 24px;
+  width: 64px;
+}
+
+.approval .line-14 {
+  height: 44px;
+  left: 134px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 1px;
+}
+
+.approval .frame-8977 {
+  left: 421px;
+  width: 179px;
+}
+
+.approval .frame-8978 {
+  left: 0;
+  width: 172px;
+}
+
+.approval .flex-row {
+  align-items: center;
+  display: flex;
+  gap: 273px;
+  margin-left: 19.0px;
+  margin-top: 9px;
+  min-width: 539px;
+}
+
+.approval .dear-pitchai-mani-m {
+  color: var(--black);
+  font-family: var(--font-family-work_sans);
+  font-size: var(--font-size-xl);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: 3.0px;
+  min-height: 22px;
+  min-width: 189px;
+}
+
+.approval .span-2 {
+  font-family: var(--font-family-kumbh_sans);
+  font-weight: 500;
+}
+
+.approval .span-1 {
+  font-weight: 500;
+}
+
+.approval .stamp {
+  align-items: flex-end;
+  display: flex;
+  height: 73px;
+  justify-content: flex-end;
+  min-width: 77px;
+  padding: 0.6px 3.3px;
+}
+
+.approval .overlap-group4 {
+  height: 72px;
+  position: relative;
+  width: 70px;
+}
+
+.approval .stamp-1 {
+  height: 72px;
+  left: 1px;
+  position: absolute;
+  top: 0;
+  width: 68px;
+}
+
+.approval .text-here {
+  color: #06c17057;
+  font-family: var(--font-family-work_sans);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  left: 1px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 27px;
+  transform: rotate(-8.10deg);
+  width: 69px;
+}
+
+.approval .acer-india-pvt-limit {
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-right: 35.0px;
+  margin-top: 12px;
+  min-height: 48px;
+  min-width: 487px;
+}
+
+.approval .overlap-group5 {
+  height: 115px;
+  margin-left: 0;
+  margin-top: 21px;
+  position: relative;
+  width: 520px;
+}
+
+.approval .group-67 {
+  align-items: flex-end;
+  background-image: url(../img/rectangle-5557.svg);
+  background-size: 100% 100%;
+  display: flex;
+  height: 115px;
+  justify-content: flex-end;
+  left: 0;
+  min-width: 520px;
+  position: absolute;
+  top: 0;
+}
+
+.approval .line-container {
+  height: 114px;
+  position: relative;
+  width: 518px;
+}
+
+.approval .line-15 {
+  height: 114px;
+  left: 258px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 1px;
+}
+
+.approval .line-16 {
+  height: 1px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 35px;
+  width: 518px;
+}
+
+.approval .line-17 {
+  height: 1px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 74px;
+  width: 518px;
+}
+
+.approval .counterparty-name {
+  background-color: transparent;
+  border: 0;
+  height: 16px;
+  left: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  padding: 0;
+  position: absolute;
+  top: 9px;
+  width: 135px;
+}
+
+.approval .counterparty-name::placeholder {
+  color: #00000099;
+}
+
+.approval .reference-id {
+  left: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 47px;
+}
+
+.approval .received-date {
+  left: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 86px;
+}
+
+.approval .acer-india-pvt-limited {
+  background-color: transparent;
+  border: 0;
+  height: 16px;
+  left: 276px;
+  letter-spacing: 0;
+  line-height: normal;
+  padding: 0;
+  position: absolute;
+  top: 9px;
+  width: 160px;
+}
+
+.approval .acer-india-pvt-limited::placeholder {
+  color: #00000099;
+}
+
+.approval .x567878-9002-34409 {
+  background-color: transparent;
+  border: 0;
+  height: 16px;
+  left: 276px;
+  letter-spacing: 0;
+  line-height: normal;
+  padding: 0;
+  position: absolute;
+  top: 49px;
+  width: 135px;
+}
+
+.approval .x567878-9002-34409::placeholder {
+  color: #00000099;
+}
+
+.approval .x18012023 {
+  background-color: transparent;
+  border: 0;
+  height: 16px;
+  left: 276px;
+  letter-spacing: 0;
+  line-height: normal;
+  padding: 0;
+  position: absolute;
+  top: 89px;
+  width: 74px;
+}
+
+.approval .x18012023::placeholder {
+  color: #00000099;
+}
+
+.approval .note-if-triton-cann {
+  color: #a39f9f;
+  font-family: var(--font-family-kumbh_sans);
+  font-size: var(--font-size-xxs);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-right: 58.0px;
+  margin-top: 12px;
+  min-height: 12px;
+  min-width: 462px;
+}
+
+.approval .flex-row-1 {
+  align-items: center;
+  display: flex;
+  gap: 133px;
+  margin-right: 1.0px;
+  margin-top: 35px;
+  min-width: 521px;
+}
+
+.approval .team-container {
+  height: 64px;
+  position: relative;
+  width: 95px;
+}
+
+.approval .regards-team-triton {
+  color: var(--black);
+  font-family: var(--font-family-work_sans);
+  font-size: var(--font-size-l);
+  font-weight: 400;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 8px;
+}
+
+.approval .microsoft-teams-image-1-1 {
+  height: 64px;
+  left: 9px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 61px;
+}
+
+.approval .copyright {
+  color: #b0aaaa;
+  font-family: var(--font-family-work_sans);
+  font-size: var(--font-size-s);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-bottom: 3.0px;
+  min-height: 15px;
+  min-width: 296px;
+}
+
+.approval .rectangle-17 {
+  background-color: var(--white);
+  height: 2px;
+  margin-top: 35px;
+  width: 552px;
+}
+
+.approval .frame {
+  height: 72px;
+  position: absolute;
+  top: 0;
+}

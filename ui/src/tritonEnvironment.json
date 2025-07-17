@@ -1,0 +1,14 @@
+{
+  "qa" : {
+    "baseUrl": "http://10.100.10.68:8087/"
+  },
+  "uat" : {
+    "baseUrl": "http://10.100.10.68:8088/"
+  },
+  "dev" : {
+    "baseUrl": "http://localhost:8086/"
+  },
+  "prod" : {
+    "baseUrl": "http://10.100.10.68:8080/"
+  }
+}
